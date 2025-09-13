@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTI ARCA SOUTH TRICYCLE TERMINAL - Admin Login</title>
+    <style>
+        :root {
+            --primary-color: #FFC107;  /* Amber yellow */
+            --secondary-color: #FFA000;  /* Darker amber */
+            --accent-color: #FF6F00;  /* Deep orange accent */
+            --light-color: #FFF8E1;  /* Light amber background */
+            --dark-color: #5D4037;  /* Brown for text */
+            --success-color: #689F38;  /* Green for success */
+            --danger-color: #D32F2F;  /* Red for errors */
+            --admin-color: #673AB7;  /* Purple for admin elements */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 3rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+            border: 2px solid var(--admin-color);
+        }
+   
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--admin-color);
+        }
+        
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--admin-color);
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+        
+        .terminal-badge {
+            display: inline-block;
+            background-color: var(--admin-color);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+        }
+        
+        .admin-badge {
+            background-color: var(--admin-color);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+        
+        .form-group {
+            margin-bottom: 1.75rem;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            color: var(--dark-color);
+            font-weight: 500;
+            font-size: 1.05rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            background-color: #FFFDE7;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--admin-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.2);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--admin-color);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.75rem;
+        }
+        
+        .btn:hover {
+            background-color: #5E35B1;
+            transform: translateY(-2px);
+        }
+        
+        .alert {
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            display: none;
+        }
+        
+        .alert-success {
+            background-color: rgba(104, 159, 56, 0.2);
+            color: var(--success-color);
+            border: 1px solid rgba(104, 159, 56, 0.3);
+        }
+        
+        .alert-danger {
+            background-color: rgba(211, 47, 47, 0.2);
+            color: var(--danger-color);
+            border: 1px solid rgba(211, 47, 47, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1px;
+            background-color: #FFF9C4;
+            color: #7e7d7d;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>FTI ARCA SOUTH <span class="admin-badge">ADMIN</span></h1>
+            <div class="terminal-badge">TRICYCLE TERMINAL SYSTEM</div>
+            <p id="subtitle">Administrator access only</p>
+        </div>
+        
+        <!-- Admin Login Form -->
+    <div id="login-tab">
+        <div id="login-alert" class="alert"></div>
+        
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="login-adminname">Admin Name</label>
+                <input type="text" id="login-adminname" placeholder="Enter admin name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="login-adminnumber">Admin Number</label>
+                <input type="number" id="login-adminnumber" placeholder="Enter admin number" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="btn">Admin Login</button>
+        </form>
+    </div>
+
+
+    <script>
+        // Form submission handler
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            const alert = document.getElementById('login-alert');
+            alert.textContent = `Admin login attempt for ${email} (simulated)`;
+            alert.classList.add('alert-success');
+            alert.style.display = 'block';
+            
+            // In a real app, you would send this to a server
+            console.log('Admin login attempt:', { email, password });
+            
+            // Simulate successful login redirect
+            setTimeout(() => {
+                window.location.href = 'admin-dashboard.html';
+            }, 1500);
+        }
+    </script>
+     <footer>
+    <p>Created by Bacanto, Nacion, and Tan</p>
+</footer>
+</body>
+</html>

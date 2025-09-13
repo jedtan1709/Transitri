@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTI ARCA SOUTH - System Configuration</title>
+    <style>
+        :root {
+            --primary-color: #FFC107;  /* Amber yellow */
+            --secondary-color: #FFA000;  /* Darker amber */
+            --accent-color: #FF6F00;  /* Deep orange accent */
+            --light-color: #FFF8E1;  /* Light amber background */
+            --dark-color: #5D4037;  /* Brown for text */
+            --admin-color: #673AB7;  /* Purple for admin */
+            --success-color: #689F38;  /* Green for success */
+            --danger-color: #D32F2F;  /* Red for errors */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-right: 1.5rem;
+        }
+        
+        .terminal-badge {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info span {
+            margin-right: 1rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: var(--admin-color);
+        }
+        
+        .logout-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background-color: #E65100;
+        }
+
+         .back-btn {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        
+        .config-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid var(--admin-color);
+        }
+        
+        .page-title {
+            color: var(--admin-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--admin-color);
+        }
+        
+        .page-description {
+            color: var(--dark-color);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .config-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 2rem;
+        }
+        
+        .config-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--dark-color);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .config-tab.active {
+            color: var(--admin-color);
+            border-bottom: 2px solid var(--admin-color);
+        }
+        
+        .config-tab:hover:not(.active) {
+            background-color: #FFF9C4;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            color: var(--admin-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title::before {
+            content: "⚙️";
+            margin-right: 0.5rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: #FFFDE7;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--admin-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.2);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .checkbox-group input {
+            margin-right: 0.5rem;
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-save {
+            background-color: var(--admin-color);
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn-save:hover {
+            background-color: #5E35B1;
+        }
+        
+        .btn-test {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-test:hover {
+            background-color: #558B2F;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .required-field::after {
+            content: " *";
+            color: var(--danger-color);
+        }
+        
+        .rfid-test-area {
+            border: 2px dashed var(--admin-color);
+            border-radius: 6px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .rfid-test-icon {
+            font-size: 3rem;
+            color: var(--admin-color);
+            margin-bottom: 1rem;
+        }
+        
+        .rfid-status {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .rfid-success {
+            background-color: rgba(104, 159, 56, 0.2);
+            color: var(--success-color);
+            border: 1px solid rgba(104, 159, 56, 0.3);
+            display: block;
+        }
+        
+        .rfid-error {
+            background-color: rgba(211, 47, 47, 0.2);
+            color: var(--danger-color);
+            border: 1px solid rgba(211, 47, 47, 0.3);
+            display: block;
+        }
+        
+        .system-status {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 6px;
+            background-color: #FFF9C4;
+            margin-bottom: 1.5rem;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.8rem;
+        }
+        
+        .status-active {
+            background-color: var(--success-color);
+        }
+        
+        .status-inactive {
+            background-color: var(--danger-color);
+        }
+        
+        .backup-list {
+            border: 1px solid #eee;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .backup-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        
+        .backup-item:last-child {
+            border-bottom: none;
+        }
+        
+        .backup-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .backup-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.3rem;
+            border-radius: 4px;
+        }
+        
+        .backup-btn:hover {
+            background-color: #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .config-tabs {
+                flex-direction: column;
+            }
+            
+            .config-tab {
+                border-bottom: 1px solid #eee;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        footer {
+            text-align: center;
+            padding: 1px;
+            background-color: #FFF9C4;
+            color: #7e7d7d;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>FTI ARCA SOUTH</h1>
+            <div class="terminal-badge">TRICYCLE TERMINAL</div>
+        </div>
+        <div class="user-info">
+            <span>Welcome, <span class="admin-name" id="current-admin">Admin</span></span>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </header>
+    
+    <main>
+        <div class="config-container">
+            <h1 class="page-title">System Configuration</h1>
+            <p class="page-description">Configure terminal settings, RFID parameters, and system preferences.</p>
+            
+            <div class="config-tabs">
+                <div class="config-tab active" onclick="switchTab('rfid')">RFID Settings</div>
+                <div class="config-tab" onclick="switchTab('terminal')">Terminal Settings</div>
+                <div class="config-tab" onclick="switchTab('system')">System Preferences</div>
+                <div class="config-tab" onclick="switchTab('backup')">Backup & Restore</div>
+            </div>
+            
+            <!-- RFID Settings Tab -->
+            <div id="rfid-tab" class="tab-content active">
+                <div class="system-status">
+                    <div class="status-indicator status-active"></div>
+                    <span>RFID System: <strong>Active</strong> | Last scan: Today, 10:15 AM</span>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-title">RFID Reader Configuration</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="rfid-type" class="required-field">RFID Reader Type</label>
+                            <select id="rfid-type" required>
+                                <option value="uhf">UHF RFID Reader</option>
+                                <option value="hf">HF RFID Reader</option>
+                                <option value="lf">LF RFID Reader</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="rfid-port" class="required-field">Connection Port</label>
+                            <input type="text" id="rfid-port" value="COM3" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rfid-baudrate">Baud Rate</label>
+                            <input type="number" id="rfid-baudrate" value="9600">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rfid-sensitivity">Scan Sensitivity</label>
+                        <input type="range" id="rfid-sensitivity" min="1" max="10" value="7">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-title">RFID Tag Settings</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="tag-prefix">Tag ID Prefix</label>
+                            <input type="text" id="tag-prefix" value="FTI-">
+                        </div>
+                        <div class="form-group">
+                            <label for="tag-length" class="required-field">Tag ID Length</label>
+                            <input type="number" id="tag-length" value="8" min="6" max="12" required>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="tag-autoassign" checked>
+                        <label for="tag-autoassign">Automatically assign new RFID tags</label>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-title">RFID Test</h2>
+                    <button class="btn btn-test">Test RFID Connection</button>
+                    
+                    <div class="rfid-test-area">
+                        <div class="rfid-test-icon">🔘</div>
+                        <p>Scan an RFID tag to test the reader</p>
+                        <div id="rfid-test-result" class="rfid-status"></div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn">Cancel</button>
+                    <button type="button" class="btn btn-save">Save RFID Settings</button>
+                </div>
+            </div>
+            
+            <!-- Terminal Settings Tab -->
+            <div id="terminal-tab" class="tab-content">
+                <div class="form-section">
+                    <h2 class="section-title">Terminal Operating Hours</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="terminal-open" class="required-field">Opening Time</label>
+                            <input type="time" id="terminal-open" value="06:00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="terminal-close" class="required-field">Closing Time</label>
+                            <input type="time" id="terminal-close" value="22:00" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-title">Terminal Zones</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="zone-parking">Parking Zone Capacity</label>
+                            <input type="number" id="zone-parking" value="50" min="10" max="200">
+                        </div>
+                        <div class="form-group">
+                            <label for="zone-queue">Queue Zone Capacity</label>
+                            <input type="number" id="zone-queue" value="30" min="5" max="100">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-title">Display Settings</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="display-theme">Interface Theme</label>
+                            <select id="display-theme">
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                                <option value="terminal" selected>Terminal (Yellow)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="display-language">Language</label>
+                            <select id="display-language">
+                                <option value="en" selected>English</option>
+                                <option value="tl">Filipino</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn">Cancel</button>
+                    <button type="button" class="btn btn-save">Save Terminal Settings</button>
+                </div>
+            </div>
+            
+            <!-- System Preferences Tab -->
+            <div id="system-tab" class="tab-content">
+                <div class="form-section">
+                    <h2 class="section-title">System Security</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="admin-timeout" class="required-field">Admin Session Timeout (minutes)</label>
+                            <input type="number" id="admin-timeout" value="30" min="5" max="240" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password-strength">Minimum Password Strength</label>
+                            <select id="password-strength">
+                                <option value="low">Low (6 characters)</option>
+                                <option value="medium" selected>Medium (8 characters with mix)</option>
+                                <option value="high">High (10 characters with special)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="login-attempts" checked>
+                        <label for="login-attempts">Enable login attempt limiting (5 attempts max)</label>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-title">Data Retention</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="keep-logs">Keep Activity Logs (days)</label>
+                            <input type="number" id="keep-logs" value="90" min="7" max="365">
+                        </div>
+                        <div class="form-group">
+                            <label for="keep-trips">Keep Trip Records (days)</label>
+                            <input type="number" id="keep-trips" value="180" min="30" max="730">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-title">System Maintenance</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="auto-updates">Automatic Updates</label>
+                            <select id="auto-updates">
+                                <option value="enabled">Enabled</option>
+                                <option value="notify" selected>Notify Only</option>
+                                <option value="disabled">Disabled</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance-window">Maintenance Window</label>
+                            <select id="maintenance-window">
+                                <option value="0000-0400">12 AM - 4 AM</option>
+                                <option value="0100-0500">1 AM - 5 AM</option>
+                                <option value="0200-0600" selected>2 AM - 6 AM</option>
+                                <option value="manual">Manual Only</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn">Cancel</button>
+                    <button type="button" class="btn btn-save">Save System Preferences</button>
+                </div>
+            </div>
+            
+            <!-- Backup & Restore Tab -->
+            <div id="backup-tab" class="tab-content">
+                <div class="form-section">
+                    <h2 class="section-title">System Backup</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="backup-frequency">Backup Frequency</label>
+                            <select id="backup-frequency">
+                                <option value="daily">Daily</option>
+                                <option value="weekly" selected>Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="backup-location">Backup Location</label>
+                            <input type="text" id="backup-location" value="/backups/fti-terminal">
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-test" style="margin-bottom: 1.5rem;">Create Manual Backup Now</button>
+                    
+                    <h3>Recent Backups</h3>
+                    <div class="backup-list">
+                        <div class="backup-item">
+                            <div>
+                                <strong>Backup_20230615_0200.zip</strong><br>
+                                <small>June 15, 2023 - 2.4 GB - Full System</small>
+                            </div>
+                            <div class="backup-actions">
+                                <button class="backup-btn" title="Download">⏬</button>
+                                <button class="backup-btn" title="Restore">🔄</button>
+                                <button class="backup-btn" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="backup-item">
+                            <div>
+                                <strong>Backup_20230608_0200.zip</strong><br>
+                                <small>June 8, 2023 - 2.3 GB - Full System</small>
+                            </div>
+                            <div class="backup-actions">
+                                <button class="backup-btn" title="Download">⏬</button>
+                                <button class="backup-btn" title="Restore">🔄</button>
+                                <button class="backup-btn" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="backup-item">
+                            <div>
+                                <strong>Backup_20230601_0200.zip</strong><br>
+                                <small>June 1, 2023 - 2.2 GB - Full System</small>
+                            </div>
+                            <div class="backup-actions">
+                                <button class="backup-btn" title="Download">⏬</button>
+                                <button class="backup-btn" title="Restore">🔄</button>
+                                <button class="backup-btn" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-title">System Restore</h2>
+                    <div class="form-group">
+                        <label for="restore-file">Select Backup File</label>
+                        <input type="file" id="restore-file" accept=".zip">
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="restore-confirm">
+                        <label for="restore-confirm">I understand this will overwrite current system data</label>
+                    </div>
+                    
+                    <button class="btn" style="background-color: var(--danger-color); color: white; margin-top: 1rem;">Restore System</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Get current admin name (from localStorage or default)
+        document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
+        
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all tab buttons
+            document.querySelectorAll('.config-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Activate clicked tab button
+            event.currentTarget.classList.add('active');
+        }
+        
+        // RFID Test functionality
+        document.querySelector('.btn-test').addEventListener('click', function() {
+            const testArea = document.querySelector('.rfid-test-area');
+            const testResult = document.getElementById('rfid-test-result');
+            
+            testArea.innerHTML = `
+                <div class="rfid-test-icon">⏳</div>
+                <p>Testing RFID reader connection...</p>
+            `;
+            
+            // Simulate RFID test
+            setTimeout(() => {
+                // 80% chance of success for demo purposes
+                const isSuccess = Math.random() > 0.2;
+                
+                if (isSuccess) {
+                    testArea.innerHTML = `
+                        <div class="rfid-test-icon">✅</div>
+                        <p>RFID reader test successful!</p>
+                        <div class="rfid-status rfid-success">
+                            Detected RFID Tag: FTI-${Math.floor(100000 + Math.random() * 900000)}
+                        </div>
+                    `;
+                } else {
+                    testArea.innerHTML = `
+                        <div class="rfid-test-icon">❌</div>
+                        <p>RFID reader test failed</p>
+                        <div class="rfid-status rfid-error">
+                            Error: Could not connect to RFID reader. Check connections.
+                        </div>
+                    `;
+                }
+            }, 2000);
+        });
+        
+        // Save buttons functionality
+        document.querySelectorAll('.btn-save').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.closest('.tab-content').id;
+                let tabName = '';
+                
+                switch(tabId) {
+                    case 'rfid-tab':
+                        tabName = 'RFID Settings';
+                        break;
+                    case 'terminal-tab':
+                        tabName = 'Terminal Settings';
+                        break;
+                    case 'system-tab':
+                        tabName = 'System Preferences';
+                        break;
+                }
+                
+                alert(`${tabName} saved successfully!`);
+            });
+        });
+        
+        // Backup buttons functionality
+        document.querySelectorAll('.backup-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.getAttribute('title');
+                const backupFile = this.closest('.backup-item').querySelector('strong').textContent;
+                
+                switch(action) {
+                    case 'Download':
+                        alert(`Downloading backup: ${backupFile}`);
+                        break;
+                    case 'Restore':
+                        if (confirm(`Restore system from ${backupFile}?`)) {
+                            alert(`System restore from ${backupFile} initiated. System will restart.`);
+                        }
+                        break;
+                    case 'Delete':
+                        if (confirm(`Delete backup file ${backupFile}?`)) {
+                            this.closest('.backup-item').remove();
+                            alert(`Backup ${backupFile} deleted.`);
+                        }
+                        break;
+                }
+            });
+        });
+        
+        // Logout functionality
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('currentAdmin');
+            window.location.href = 'FTI Log&Sign.html';
+        });
+    </script>
+      <button class="back-btn" onclick="window.history.back()">
+            ← Back
+        </button>
+         <footer>
+    <p>Created by Bacanto, Nacion, and Tan</p>
+</footer>
+</body>
+</html>

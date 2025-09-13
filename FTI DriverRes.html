@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTI ARCA SOUTH - Driver Registration</title>
+    <style>
+        :root {
+            --primary-color: #FFC107;  /* Amber yellow */
+            --secondary-color: #FFA000;  /* Darker amber */
+            --accent-color: #FF6F00;  /* Deep orange accent */
+            --light-color: #FFF8E1;  /* Light amber background */
+            --dark-color: #5D4037;  /* Brown for text */
+            --admin-color: #673AB7;  /* Purple for admin */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-right: 1.5rem;
+        }
+        
+        .terminal-badge {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info span {
+            margin-right: 1rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: var(--admin-color);
+        }
+        
+        .logout-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background-color: #E65100;
+        }
+        
+           .back-btn {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .registration-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .page-title {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .page-description {
+            color: var(--dark-color);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: #FFFDE7;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-submit {
+            background-color: var(--admin-color);
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn-submit:hover {
+            background-color: #5E35B1;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .required-field::after {
+            content: " *";
+            color: var(--danger-color);
+        }
+        
+        .photo-upload {
+            border: 2px dashed var(--primary-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .photo-upload:hover {
+            background-color: #FFF9C4;
+        }
+        
+        .photo-upload-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .photo-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 6px;
+            object-fit: cover;
+            display: none;
+            margin: 0 auto;
+        }
+        footer {
+            text-align: center;
+            padding: 1px;
+            background-color: #FFF9C4;
+            color: #7e7d7d;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>FTI ARCA SOUTH</h1>
+            <div class="terminal-badge">TRICYCLE TERMINAL</div>
+        </div>
+        <div class="user-info">
+            <span>Welcome, <span class="admin-name" id="current-admin">Admin</span></span>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </header>
+    
+    <main>
+        <div class="registration-container">
+            <h1 class="page-title">Driver Registration</h1>
+            <p class="page-description">Register new tricycle drivers with their complete information and vehicle details.</p>
+            
+            <form id="driver-registration-form">
+                <!-- Personal Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">03.10 Registration - Personal Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="first-name" class="required-field">First Name</label>
+                            <input type="text" id="first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="middle-name">Middle Name</label>
+                            <input type="text" id="middle-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name" class="required-field">Last Name</label>
+                            <input type="text" id="last-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="birthdate" class="required-field">Date of Birth</label>
+                            <input type="date" id="birthdate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender" class="required-field">Gender</label>
+                            <select id="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="civil-status">Civil Status</label>
+                            <select id="civil-status">
+                                <option value="">Select Status</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="widowed">Widowed</option>
+                                <option value="separated">Separated</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Contact Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="address" class="required-field">Complete Address</label>
+                            <textarea id="address" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile" class="required-field">Mobile Number</label>
+                            <input type="tel" id="mobile" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Government IDs Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Government Identification</h2>
+                    <div class="form-grid">
+                        <!-- 
+                        <div class="form-group">
+                            <label for="tin">TIN Number</label>
+                            <input type="text" id="tin">
+                        </div>
+                        <div class="form-group">
+                            <label for="sss">SSS Number</label>
+                            <input type="text" id="sss">
+                        </div>
+                        <div class="form-group">
+                            <label for="philhealth">PhilHealth Number</label>
+                            <input type="text" id="philhealth">
+                        </div>
+                        -->
+                        <div class="form-group">
+                            <label for="license" class="required-field">Driver's License Number</label>
+                            <input type="text" id="license" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="license-expiry">License Expiry Date</label>
+                            <input type="date" id="license-expiry">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vehicle Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Vehicle Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="vehicle-make" class="required-field">Vehicle Make</label>
+                            <input type="text" id="vehicle-make" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicle-model" class="required-field">Vehicle Model</label>
+                            <input type="text" id="vehicle-model" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicle-year">Year</label>
+                            <input type="number" id="vehicle-year" min="1900" max="2023">
+                        </div>
+                        <div class="form-group">
+                            <label for="plate-number" class="required-field">Plate Number</label>
+                            <input type="text" id="plate-number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rfid-tag" class="required-field">RFID Tag Number</label>
+                            <input type="text" id="rfid-tag" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="or-number">OR Number</label>
+                            <input type="text" id="or-number">
+                        </div>
+                        <div class="form-group">
+                            <label for="cr-number">CR Number</label>
+                            <input type="text" id="cr-number">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Photo Upload Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Driver Photo</h2>
+                    <div class="form-group">
+                        <div class="photo-upload" id="photo-upload-area">
+                            <div class="photo-upload-icon">📷</div>
+                            <p>Click to upload driver photo</p>
+                            <p><small>Recommended size: 300x300 pixels</small></p>
+                            <img id="photo-preview" class="photo-preview" alt="Driver photo preview">
+                        </div>
+                        <input type="file" id="driver-photo" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                
+                <!-- Terms and Conditions -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" class="required-field">I certify that all information provided is true and correct.</label>
+                    </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn">Cancel</button>
+                    <button type="submit" class="btn btn-submit">Register Driver</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Get current admin name (from localStorage or default)
+        document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
+        
+        // Photo upload functionality
+        const photoUpload = document.getElementById('photo-upload-area');
+        const fileInput = document.getElementById('driver-photo');
+        const photoPreview = document.getElementById('photo-preview');
+        
+        photoUpload.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    photoPreview.src = event.target.result;
+                    photoPreview.style.display = 'block';
+                    photoUpload.querySelector('p').style.display = 'none';
+                    photoUpload.querySelector('.photo-upload-icon').style.display = 'none';
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Form submission
+        document.getElementById('driver-registration-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Form validation
+            const requiredFields = document.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    field.style.borderColor = 'var(--danger-color)';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '';
+                }
+            });
+            
+            if (isValid) {
+                alert('Driver registration submitted successfully!');
+                // In real app, you would send data to server here
+                // console.log('Form data:', getFormData());
+                // this.reset();
+                // photoPreview.style.display = 'none';
+                // photoUpload.querySelector('p').style.display = '';
+                // photoUpload.querySelector('.photo-upload-icon').style.display = '';
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        });
+        
+        // Helper function to get form data (for demo)
+        function getFormData() {
+            const form = document.getElementById('driver-registration-form');
+            const formData = new FormData(form);
+            const data = {};
+            
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            
+            return data;
+        }
+        
+        // Logout functionality
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('currentAdmin');
+            window.location.href = 'FTI Log&Sign.html';
+        });
+    </script>
+    <button class="back-btn" onclick="window.history.back()">
+            ← Back
+        </button>
+         <footer>
+    <p>Created by Bacanto, Nacion, and Tan</p>
+</footer>
+</body>
+</html>
