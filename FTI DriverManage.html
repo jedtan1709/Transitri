@@ -367,9 +367,15 @@
                         <option value="oldest">Oldest</option>
                     </select>
                 </div>
+
+                
                 
                 <button class="btn btn-add">
                     <span>+</span> Add New Driver
+                </button>
+
+                <button class="btn" onclick="location.href='FTI GPS Tracking.html'" style="background-color: var(--success-color); color: white;">
+                    <span>📍</span> View GPS Tracking
                 </button>
                 
                 <button class="btn btn-export">
@@ -552,7 +558,7 @@
         
         // Add new driver button
         document.querySelector('.btn-add').addEventListener('click', function() {
-            window.location.href = 'driver-registration.html';
+            window.location.href = 'FTI DriverRes.html';
         });
         
         // Export button

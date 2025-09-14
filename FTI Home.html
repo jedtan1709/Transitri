@@ -168,6 +168,55 @@
             bottom: 0;
             width: 100%;
         }
+
+         .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--admin-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .recent-activity {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
     </style>
 </head>
 <body>
@@ -183,29 +232,40 @@
     </header>
     
     <main>
-        <div class="dashboard">
-            <!-- Driver Registration Card -->
-            <div class="card" onclick="location.href='FTI DriverRes.html'">
-                <div class="card-icon">🚚</div>
-                <h2>Driver Registration</h2>
-                <p>Register new tricycle drivers with their complete information and vehicle details.</p>
-                <button class="logout-btn" style="background-color: var(--primary-color); align-self: flex-start;">Go to Registration</button>
+         <h1 class="page-title">Dashboard</h1>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value" id="total-drivers">24</div>
+                <div class="stat-label">Total Drivers</div>
             </div>
-            
-            <!-- Time In with RFID Scanner Card -->
-            <div class="card" onclick="location.href='FTI RFID.html'">
-                <div class="card-icon">⏱️</div>
-                <h2>Time In with RFID</h2>
-                <p>Record driver time-in using RFID scanning technology for accurate attendance tracking.</p>
-                <button class="logout-btn" style="background-color: var(--primary-color); align-self: flex-start;">Go to Time In</button>
+            <div class="stat-card">
+                <div class="stat-value" id="active-drivers">18</div>
+                <div class="stat-label">Active Today</div>
             </div>
-            
-            <!-- Driver Management Card -->
-            <div class="card" onclick="location.href='FTI DriverManage.html'">
-                <div class="card-icon">👥</div>
-                <h2>Driver Management</h2>
-                <p>View and manage all registered drivers, their status, and trip history.</p>
-                <button class="logout-btn" style="background-color: var(--primary-color); align-self: flex-start;">Manage Drivers</button>
+            <div class="stat-card">
+                <div class="stat-value" id="total-trips">47</div>
+                <div class="stat-label">Trips Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="total-earnings">₱4,935</div>
+                <div class="stat-label">Earnings Today</div>
+            </div>
+        </div>
+        
+        <div class="recent-activity">
+            <h2>Recent Activity</h2>
+            <div class="activity-item">
+                <span>Juan Dela Cruz started a trip</span>
+                <span>08:45 AM</span>
+            </div>
+            <div class="activity-item">
+                <span>Maria Reyes completed a trip</span>
+                <span>08:30 AM</span>
+            </div>
+            <div class="activity-item">
+                <span>Pedro Santos registered</span>
+                <span>08:15 AM</span>
             </div>
         </div>
         
@@ -302,6 +362,25 @@
             console.log("localStorage.setItem('currentAdmin', 'New Admin Name'); updateAdminName();");
         });
     </script>
+
+    <script>
+        // JavaScript to fetch and update stats from MongoDB
+        async function loadDashboardStats() {
+            try {
+                
+                // For demo purposes, we'll use static data
+                document.getElementById('total-drivers').textContent = '24';
+                document.getElementById('active-drivers').textContent = '18';
+                document.getElementById('total-trips').textContent = '47';
+                document.getElementById('total-earnings').textContent = '₱4,935';
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadDashboardStats);
+    </script>
+
     <footer>
     <p>Created by Bacanto, Nacion, and Tan</p>
 </footer>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTI ARCA SOUTH - Trip History</title>
+    <style>
+        :root {
+            --primary-color: #FFC107;
+            --secondary-color: #FFA000;
+            --accent-color: #FF6F00;
+            --light-color: #FFF8E1;
+            --dark-color: #5D4037;
+            --admin-color: #673AB7;
+            --success-color: #689F38;
+            --danger-color: #D32F2F;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-right: 1.5rem;
+        }
+        
+        .terminal-badge {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info span {
+            margin-right: 1rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: var(--admin-color);
+        }
+        
+        .logout-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background-color: #E65100;
+        }
+
+        .back-btn {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .history-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .page-title {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .page-description {
+            color: var(--dark-color);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .search-box {
+            flex-grow: 1;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: #FFFDE7;
+        }
+        
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .filter-group select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #FFFDE7;
+        }
+        
+        .date-filter {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .date-filter input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #FFFDE7;
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-export {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-export:hover {
+            background-color: #558B2F;
+        }
+        
+        .trips-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        
+        .trips-table th,
+        .trips-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .trips-table th {
+            background-color: #FFF9C4;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .trips-table tr:hover {
+            background-color: #FFFDE7;
+        }
+        
+        .driver-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .trip-status {
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-completed {
+            background-color: rgba(104, 159, 56, 0.2);
+            color: var(--success-color);
+        }
+        
+        .status-ongoing {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--primary-color);
+        }
+        
+        .status-cancelled {
+            background-color: rgba(211, 47, 47, 0.2);
+            color: var(--danger-color);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+        
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .page-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .no-trips {
+            text-align: center;
+            padding: 2rem;
+            color: var(--dark-color);
+            opacity: 0.7;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1px;
+            background-color: #FFF9C4;
+            color: #7e7d7d;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            .trips-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>FTI ARCA SOUTH</h1>
+            <div class="terminal-badge">TRICYCLE TERMINAL</div>
+        </div>
+        <div class="user-info">
+            <span>Welcome, <span class="admin-name" id="current-admin">Admin</span></span>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </header>
+    
+    <main>
+        <div class="history-container">
+            <h1 class="page-title">04.15 Trip History & Analytics</h1>
+            <p class="page-description">View detailed trip history, filter by date, driver, or status, and export reports.</p>
+            
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" placeholder="Search trips...">
+                </div>
+                
+                <div class="filter-group">
+                    <select id="driver-filter">
+                        <option value="">All Drivers</option>
+                        <option value="1">Juan Dela Cruz</option>
+                        <option value="2">Pedro Santos</option>
+                        <option value="3">Maria Reyes</option>
+                        <option value="4">Antonio Bautista</option>
+                    </select>
+                    
+                    <select id="status-filter">
+                        <option value="">All Status</option>
+                        <option value="completed">Completed</option>
+                        <option value="ongoing">Ongoing</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    
+                    <div class="date-filter">
+                        <input type="date" id="start-date">
+                        <span>to</span>
+                        <input type="date" id="end-date">
+                    </div>
+                </div>
+                
+                <button class="btn btn-export">
+                    <span>📊</span> Export Report
+                </button>
+            </div>
+            
+            <table class="trips-table">
+                <thead>
+                    <tr>
+                        <th>Driver</th>
+                        <th>Trip ID</th>
+                        <th>RFID Tag</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sample Trip 1 -->
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Driver" class="driver-photo">
+                                <span>Juan Dela Cruz</span>
+                            </div>
+                        </td>
+                        <td>TRIP-2023-001</td>
+                        <td>FTI-987654</td>
+                        <td>Today, 08:45 AM</td>
+                        <td>Today, 09:15 AM</td>
+                        <td>30 mins</td>
+                    </tr>
+                    
+                    <!-- Sample Trip 2 -->
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Driver" class="driver-photo">
+                                <span>Pedro Santos</span>
+                            </div>
+                        </td>
+                        <td>TRIP-2023-002</td>
+                        <td>FTI-123456</td>
+                        <td>Today, 09:15 AM</td>
+                        <td>Today, 09:45 AM</td>
+                        <td>30 mins</td>
+                    </tr>
+                    
+                    <!-- Sample Trip 3 -->
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Driver" class="driver-photo">
+                                <span>Maria Reyes</span>
+                            </div>
+                        </td>
+                        <td>TRIP-2023-003</td>
+                        <td>FTI-246810</td>
+                        <td>Today, 10:30 AM</td>
+                        <td>-</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+            
+            <div class="pagination">
+                <button class="page-btn">❮</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">❯</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Get current admin name (from localStorage or default)
+        document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
+        
+        // Search functionality
+        const searchInput = document.querySelector('.search-box input');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.trips-table tbody tr');
+            
+            rows.forEach(row => {
+                const driverName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                const tripId = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const rfidTag = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                
+                if (driverName.includes(searchTerm) || tripId.includes(searchTerm) || rfidTag.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        
+        driverFilter.addEventListener('change', applyFilters);
+        statusFilter.addEventListener('change', applyFilters);
+        
+        // Date filter functionality
+        const startDate = document.getElementById('start-date');
+        const endDate = document.getElementById('end-date');
+        
+        // Set default dates (today and 7 days ago)
+        const today = new Date();
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(today.getDate() - 7);
+        
+        startDate.valueAsDate = sevenDaysAgo;
+        endDate.valueAsDate = today;
+        
+        // Export button
+        document.querySelector('.btn-export').addEventListener('click', function() {
+            alert('Exporting trip report...');
+        });
+        
+        // Action buttons
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.getAttribute('title');
+                const tripId = this.closest('tr').querySelector('td:nth-child(2)').textContent;
+                const driverName = this.closest('tr').querySelector('td:nth-child(1)').textContent.trim();
+                
+                switch(action) {
+                    case 'View Details':
+                        alert('Viewing details for trip: ' + tripId);
+                        break;
+                    case 'View Route':
+                        alert('Showing route for trip: ' + tripId);
+                        break;
+                    case 'Track Live':
+                        alert('Opening live tracking for: ' + driverName);
+                        window.location.href = 'FTI GPS Tracking.html';
+                        break;
+                }
+            });
+        });
+        
+        // Logout functionality
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('currentAdmin');
+            window.location.href = 'FTI Log&Sign.html';
+        });
+    </script>
+    <button class="back-btn" onclick="window.history.back()">
+        ← Back
+    </button>
+    <footer>
+        <p>Created by Bacanto, Nacion, and Tan</p>
+    </footer>
+</body>
+</html>
