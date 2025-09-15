@@ -498,6 +498,105 @@
             </div>
         </div>
     </main>
+<script>
+    const historyTableBody = document.querySelector('.history-table tbody');
+    const paginationContainer = document.createElement('div');
+    paginationContainer.className = 'pagination';
+    document.querySelector('.scan-history').appendChild(paginationContainer);
+
+    let scanHistory = []; // store all scan records
+    let currentPage = 1;
+    const rowsPerPage = 10; // show 10 per page
+
+    // Render history with pagination
+    function renderHistory() {
+        const totalRows = scanHistory.length;
+        const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+        // Clear table
+        historyTableBody.innerHTML = '';
+
+        // Slice rows for current page
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const rows = scanHistory.slice(start, end);
+
+        rows.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${item.time}</td>
+                <td>${item.driver}</td>
+                <td>${item.rfid}</td>
+                <td>${item.vehicle}</td>
+                <td><span class="status-badge ${item.statusClass}">${item.status}</span></td>
+            `;
+            historyTableBody.appendChild(tr);
+        });
+
+        // Render pagination
+        paginationContainer.innerHTML = '';
+
+        if (totalPages > 1) {
+            const prevBtn = document.createElement('button');
+            prevBtn.textContent = '❮ Prev';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => { currentPage--; renderHistory(); };
+            paginationContainer.appendChild(prevBtn);
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i > 100) break; // Limit to 100 pages
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = (i === currentPage ? 'active' : '');
+                btn.onclick = () => { currentPage = i; renderHistory(); };
+                paginationContainer.appendChild(btn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Next ❯';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => { currentPage++; renderHistory(); };
+            paginationContainer.appendChild(nextBtn);
+        }
+    }
+
+    // Helper: format time
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Modify Confirm Time In button to add new row
+    document.getElementById('confirm-timein').addEventListener('click', function() {
+        const driverName = document.getElementById('driver-name').textContent;
+        const rfid = document.querySelector('.driver-meta-item:nth-child(2)').textContent.replace('RFID: ', '');
+        const vehicle = document.querySelector('.vehicle-info').textContent.replace('Vehicle:', '').trim();
+
+        scanHistory.unshift({
+            time: getCurrentTime(),
+            driver: driverName,
+            rfid: rfid,
+            vehicle: vehicle,
+            status: 'Time In',
+            statusClass: 'badge-success'
+        });
+
+        renderHistory();
+
+        // Reset scanner
+        document.getElementById('scan-result').style.display = 'none';
+        document.getElementById('driver-details').style.display = 'none';
+    });
+
+    // Initialize with some dummy rows (optional demo)
+    scanHistory = [
+        {time:'09:15 AM', driver:'Juan Dela Cruz', rfid:'FTI-987654', vehicle:'Honda TMX 155', status:'Time In', statusClass:'badge-success'},
+        {time:'08:45 AM', driver:'Maria Reyes', rfid:'FTI-123456', vehicle:'Suzuki Raider 150', status:'Time In', statusClass:'badge-success'},
+        {time:'08:30 AM', driver:'Pedro Santos', rfid:'FTI-567890', vehicle:'Yamaha Sniper 150', status:'Late', statusClass:'badge-warning'},
+        {time:'08:15 AM', driver:'Antonio Bautista', rfid:'FTI-345678', vehicle:'Kawasaki Barako 175', status:'Invalid Tag', statusClass:'badge-error'}
+    ];
+    renderHistory();
+</script>
 
     <script>
         // Get current admin name (from localStorage or default)

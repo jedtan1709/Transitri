@@ -508,6 +508,112 @@
             </div>
         </div>
     </main>
+<script>
+    const rowsPerPage = 10; // how many drivers per page
+    let currentPage = 10;
+
+    const tableBody = document.querySelector('.drivers-table tbody');
+    let allRows = Array.from(tableBody.querySelectorAll('tr'));
+    let filteredRows = [...allRows]; // dynamic dataset after search/filter/sort
+
+    // ----------------- Helper: Render -----------------
+    function renderTable() {
+        const totalRows = filteredRows.length;
+        const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+        if (currentPage > totalPages) currentPage = totalPages || 1;
+
+        tableBody.innerHTML = '';
+
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        filteredRows.slice(start, end).forEach(r => tableBody.appendChild(r));
+
+        // Pagination buttons
+        const pagination = document.querySelector('.pagination');
+        pagination.innerHTML = '';
+
+        if (totalPages > 1) {
+            const prevBtn = document.createElement('button');
+            prevBtn.textContent = '❮';
+            prevBtn.className = 'page-btn';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => { currentPage--; renderTable(); };
+            pagination.appendChild(prevBtn);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+                btn.onclick = () => { currentPage = i; renderTable(); };
+                pagination.appendChild(btn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = '❯';
+            nextBtn.className = 'page-btn';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => { currentPage++; renderTable(); };
+            pagination.appendChild(nextBtn);
+        }
+    }
+
+    // ----------------- Apply Filters -----------------
+    function applyFilters() {
+        const searchTerm = document.querySelector('.search-box input').value.toLowerCase();
+        const status = document.getElementById('status-filter').value;
+
+        filteredRows = allRows.filter(row => {
+            const driverName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const rfidTag = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            const plateNumber = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+            const rowStatus = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+
+            const matchesSearch = driverName.includes(searchTerm) || rfidTag.includes(searchTerm) || plateNumber.includes(searchTerm);
+            const matchesStatus = (status === '' || rowStatus.includes(status));
+
+            return matchesSearch && matchesStatus;
+        });
+
+        renderTable();
+    }
+
+    // ----------------- Sorting -----------------
+    document.getElementById('sort-by').addEventListener('change', function() {
+        const option = this.value;
+
+        filteredRows.sort((a, b) => {
+            const nameA = a.querySelector('td:nth-child(2) strong').textContent.trim().toLowerCase();
+            const nameB = b.querySelector('td:nth-child(2) strong').textContent.trim().toLowerCase();
+            const indexA = allRows.indexOf(a);
+            const indexB = allRows.indexOf(b);
+
+            switch(option) {
+                case 'name-asc': return nameA.localeCompare(nameB);
+                case 'name-desc': return nameB.localeCompare(nameA);
+                case 'recent': return indexB - indexA; // newer first
+                case 'oldest': return indexA - indexB; // original order
+                default: return 0;
+            }
+        });
+
+        renderTable();
+    });
+
+    // ----------------- Events -----------------
+    document.querySelector('.search-box input').addEventListener('input', () => {
+        currentPage = 1;
+        applyFilters();
+    });
+
+    document.getElementById('status-filter').addEventListener('change', () => {
+        currentPage = 1;
+        applyFilters();
+    });
+
+    // ----------------- Init -----------------
+    applyFilters();
+</script>
 
     <script>
         // Get current admin name (from localStorage or default)

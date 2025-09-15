@@ -404,76 +404,47 @@
                 </button>
             </div>
             
-            <table class="users-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Last Login</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Admin User</td>
-                        <td>admin@ftiarca.com</td>
-                        <td><span class="user-role role-admin">Administrator</span></td>
-                        <td>Today, 09:45 AM</td>
-                        <td>Active</td>
-                        <td>
-                            <button class="action-btn edit-btn" data-user="1">✏️ Edit</button>
-                            <button class="action-btn delete-btn" data-user="1">🗑️ Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Terminal Manager</td>
-                        <td>manager@ftiarca.com</td>
-                        <td><span class="user-role role-manager">Manager</span></td>
-                        <td>Today, 08:30 AM</td>
-                        <td>Active</td>
-                        <td>
-                            <button class="action-btn edit-btn" data-user="2">✏️ Edit</button>
-                            <button class="action-btn delete-btn" data-user="2">🗑️ Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Staff One</td>
-                        <td>staff1@ftiarca.com</td>
-                        <td><span class="user-role role-staff">Staff</span></td>
-                        <td>Yesterday, 05:15 PM</td>
-                        <td>Active</td>
-                        <td>
-                            <button class="action-btn edit-btn" data-user="3">✏️ Edit</button>
-                            <button class="action-btn delete-btn" data-user="3">🗑️ Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Staff Two</td>
-                        <td>staff2@ftiarca.com</td>
-                        <td><span class="user-role role-staff">Staff</span></td>
-                        <td>June 5, 2023</td>
-                        <td>Inactive</td>
-                        <td>
-                            <button class="action-btn edit-btn" data-user="4">✏️ Edit</button>
-                            <button class="action-btn delete-btn" data-user="4">🗑️ Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Driver Supervisor</td>
-                        <td>supervisor@ftiarca.com</td>
-                        <td><span class="user-role role-manager">Manager</span></td>
-                        <td>June 6, 2023</td>
-                        <td>Active</td>
-                        <td>
-                            <button class="action-btn edit-btn" data-user="5">✏️ Edit</button>
-                            <button class="action-btn delete-btn" data-user="5">🗑️ Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+           <table class="users-table" id="users-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Last Login</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="users-body">
+        <!-- Users dynamically paginated -->
+        <tr>
+            <td>Admin User</td>
+            <td>admin@ftiarca.com</td>
+            <td><span class="user-role role-admin">Administrator</span></td>
+            <td>Today, 09:45 AM</td>
+            <td>Active</td>
+            <td>
+                <button class="action-btn edit-btn" data-user="1">✏️ Edit</button>
+                <button class="action-btn delete-btn" data-user="1">🗑️ Delete</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Terminal Manager</td>
+            <td>manager@ftiarca.com</td>
+            <td><span class="user-role role-manager">Manager</span></td>
+            <td>Today, 08:30 AM</td>
+            <td>Active</td>
+            <td>
+                <button class="action-btn edit-btn" data-user="2">✏️ Edit</button>
+                <button class="action-btn delete-btn" data-user="2">🗑️ Delete</button>
+            </td>
+        </tr>
+        <!-- Keep adding users here -->
+    </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<div id="pagination" style="margin-top: 20px; text-align: center;"></div>
     </main>
     
     <!-- Add/Edit User Modal -->
@@ -527,6 +498,97 @@
             </div>
         </div>
     </div>
+<script>
+    // Pagination settings
+    const rowsPerPage = 10;
+    const table = document.getElementById("users-table");
+    const tbody = document.getElementById("users-body");
+    const rows = tbody.getElementsByTagName("tr");
+    const pagination = document.getElementById("pagination");
+
+    let currentPage = 1;
+    const totalRows = rows.length;
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+    function displayRows(page) {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        for (let i = 0; i < totalRows; i++) {
+            rows[i].style.display = (i >= start && i < end) ? "" : "none";
+        }
+    }
+
+    function setupPagination() {
+        pagination.innerHTML = "";
+
+        // Previous button
+        if (currentPage > 1) {
+            const prevBtn = document.createElement("button");
+            prevBtn.textContent = "← Previous";
+            prevBtn.onclick = () => {
+                currentPage--;
+                displayRows(currentPage);
+                setupPagination();
+            };
+            pagination.appendChild(prevBtn);
+        }
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.style.margin = "0 5px";
+            if (i === currentPage) {
+                btn.style.fontWeight = "bold";
+            }
+            btn.onclick = () => {
+                currentPage = i;
+                displayRows(currentPage);
+                setupPagination();
+            };
+            pagination.appendChild(btn);
+        }
+
+        // Next button
+        if (currentPage < totalPages) {
+            const nextBtn = document.createElement("button");
+            nextBtn.textContent = "Next →";
+            nextBtn.onclick = () => {
+                currentPage++;
+                displayRows(currentPage);
+                setupPagination();
+            };
+            pagination.appendChild(nextBtn);
+        }
+    }
+
+    // Initialize
+    displayRows(currentPage);
+    setupPagination();
+    </script>
+    <script>
+    // --- SEARCH FUNCTION ---
+    const searchInput = document.querySelector(".search-bar input");
+    const userRows = document.querySelectorAll("#users-body tr");
+
+    searchInput.addEventListener("input", function () {
+        const searchTerm = this.value.toLowerCase();
+
+        userRows.forEach(row => {
+            const name = row.querySelector("td:nth-child(1)").textContent.toLowerCase();
+            const email = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+            const role = row.querySelector("td:nth-child(3)").textContent.toLowerCase();
+
+            // Match search term in Name, Email, or Role
+            if (name.includes(searchTerm) || email.includes(searchTerm) || role.includes(searchTerm)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+             });
+         });
+    </script>
 
     <script>
         // Get current admin name (from localStorage or default)
