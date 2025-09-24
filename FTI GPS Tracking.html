@@ -141,6 +141,29 @@
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
             gap: 1rem;
+            align-items: center;
+        }
+        
+        .tracking-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .status-active {
+            background-color: var(--success-color);
+        }
+        
+        .gps-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
         }
         
         .refresh-btn {
@@ -160,6 +183,16 @@
         
         .refresh-btn:hover {
             background-color: #558B2F;
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
         }
         
         .map-container {
@@ -280,15 +313,28 @@
     <main>
         <div class="tracking-container">
             <h1 class="page-title">04.10 Real-Time GPS Tracking</h1>
-            <p class="page-description">Monitor active drivers in real-time. GPS tracking is only available for drivers who have scanned their RFID within the last hour.</p>
+            <p class="page-description">Monitor active drivers in real-time. GPS tracking is only available for drivers who are within the terminal area (500m radius). Tracking automatically stops 1 hour after leaving the terminal.</p>
             
             <div class="tracking-controls">
-                <div class="last-update">
-                    Last updated: <span id="last-update-time">Just now</span>
+                <div class="tracking-status">
+                    <div class="status-indicator status-active"></div>
+                    <span>GPS Tracking: <strong id="tracking-status">Active</strong></span>
+                    <span id="active-drivers-count">Active Drivers: 0/0</span>
                 </div>
-                <button class="refresh-btn" id="refresh-locations">
-                    🔄 Refresh Locations
-                </button>
+                
+                <div class="gps-controls">
+                    <button class="btn" id="manual-location-refresh">
+                        🔄 Request Locations
+                    </button>
+                    <button class="btn" id="view-geofence">
+                        🗺️ View Terminal Area
+                    </button>
+                    <select id="tracking-interval">
+                        <option value="30">30 seconds</option>
+                        <option value="60">1 minute</option>
+                        <option value="300">5 minutes</option>
+                    </select>
+                </div>
             </div>
             
             <div class="map-container">
@@ -296,168 +342,327 @@
             </div>
             
             <div class="active-drivers-list">
-                <h3>Active Drivers (4)</h3>
-                
-                <div class="driver-card">
-                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Driver" class="driver-photo">
-                    <div class="driver-info">
-                        <div class="driver-name">Juan Dela Cruz</div>
-                        <div class="driver-meta">RFID: FTI-987654 • Vehicle: Honda TMX 155</div>
-                    </div>
-                    <div class="driver-status status-active">Active</div>
-                </div>
-                
-                <div class="driver-card">
-                    <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Driver" class="driver-photo">
-                    <div class="driver-info">
-                        <div class="driver-name">Pedro Santos</div>
-                        <div class="driver-meta">RFID: FTI-123456 • Vehicle: Yamaha Sniper 150</div>
-                    </div>
-                    <div class="driver-status status-active">Active</div>
-                </div>
-                
-                <div class="driver-card">
-                    <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Driver" class="driver-photo">
-                    <div class="driver-info">
-                        <div class="driver-name">Maria Reyes</div>
-                        <div class="driver-meta">RFID: FTI-246810 • Vehicle: Suzuki Raider 150</div>
-                    </div>
-                    <div class="driver-status status-active">Active</div>
-                </div>
-                
-                <div class="driver-card">
-                    <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Driver" class="driver-photo">
-                    <div class="driver-info">
-                        <div class="driver-name">Antonio Bautista</div>
-                        <div class="driver-meta">RFID: FTI-3691215 • Vehicle: Kawasaki Barako 175</div>
-                    </div>
-                    <div class="driver-status status-inactive">Inactive</div>
+                <h3>Active Drivers (<span id="drivers-count">0</span>)</h3>
+                <div id="drivers-list">
+                    <!-- Drivers will be populated by JavaScript -->
                 </div>
             </div>
         </div>
     </main>
 
+    <button class="back-btn" onclick="window.history.back()">← Back</button>
+    <footer><p>Created by Bacanto, Nacion, and Tan</p></footer>
+
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        // Get current admin name (from localStorage or default)
-        document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
-        
-        // Initialize map
-        const map = L.map('gps-map').setView([14.5995, 120.9842], 13); // Default to Manila coordinates
-        
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-        
-        // Sample driver locations (in a real app, this would come from your backend)
-        const driverLocations = [
-            {
-                id: 1,
-                name: "Juan Dela Cruz",
-                rfid: "FTI-987654",
-                position: [14.5995, 120.9842],
-                photo: "https://randomuser.me/api/portraits/men/1.jpg",
-                vehicle: "Honda TMX 155",
-                lastScan: new Date(),
-                status: "active"
-            },
-            {
-                id: 2,
-                name: "Pedro Santos",
-                rfid: "FTI-123456",
-                position: [14.6000, 120.9850],
-                photo: "https://randomuser.me/api/portraits/men/2.jpg",
-                vehicle: "Yamaha Sniper 150",
-                lastScan: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
-                status: "active"
-            },
-            {
-                id: 3,
-                name: "Maria Reyes",
-                rfid: "FTI-246810",
-                position: [14.5980, 120.9830],
-                photo: "https://randomuser.me/api/portraits/women/1.jpg",
-                vehicle: "Suzuki Raider 150",
-                lastScan: new Date(Date.now() - 45 * 60 * 1000), // 45 minutes ago
-                status: "active"
-            },
-            {
-                id: 4,
-                name: "Antonio Bautista",
-                rfid: "FTI-3691215",
-                position: [14.6010, 120.9860],
-                photo: "https://randomuser.me/api/portraits/men/3.jpg",
-                vehicle: "Kawasaki Barako 175",
-                lastScan: new Date(Date.now() - 65 * 60 * 1000), // 65 minutes ago (inactive)
-                status: "inactive"
-            }
-        ];
-        
-        // Add markers for each driver
-        const markers = [];
-        
-        function updateMapMarkers() {
-            // Clear existing markers
-            markers.forEach(marker => map.removeLayer(marker));
-            markers.length = 0;
-            
-            // Add new markers
-            driverLocations.forEach(driver => {
-                // Only show active drivers (scanned within last hour)
-                const isActive = (new Date() - driver.lastScan) < 60 * 60 * 1000;
+        // Mock database simulation using localStorage
+        const Database = {
+            // GPS Devices temporary storage
+            getGPSTrackingDevices() {
+                const stored = localStorage.getItem('gpsTrackingDevices');
+                if (stored) return JSON.parse(stored);
                 
-                if (isActive) {
-                    const marker = L.marker(driver.position)
-                        .addTo(map)
+                // Default mock data - will be replaced by real database later
+                return [
+                    {
+                        id: 'GPS-001',
+                        simNumber: '+639171234567',
+                        driverId: 'DRV-001',
+                        driverName: 'Juan Dela Cruz',
+                        vehicle: 'Honda TMX 155',
+                        status: 'active',
+                        lastLocation: { lat: 14.5995, lng: 120.9842 },
+                        lastScanTime: new Date().toISOString(),
+                        isInTerminal: true,
+                        trackingEnabled: true,
+                        trackingExpiry: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+                        photo: 'https://randomuser.me/api/portraits/men/1.jpg'
+                    },
+                    {
+                        id: 'GPS-002', 
+                        simNumber: '+639171234568',
+                        driverId: 'DRV-002',
+                        driverName: 'Pedro Santos',
+                        vehicle: 'Yamaha Sniper 150',
+                        status: 'active',
+                        lastLocation: { lat: 14.6000, lng: 120.9850 },
+                        lastScanTime: new Date().toISOString(),
+                        isInTerminal: true,
+                        trackingEnabled: true,
+                        trackingExpiry: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+                        photo: 'https://randomuser.me/api/portraits/men/2.jpg'
+                    },
+                    {
+                        id: 'GPS-003',
+                        simNumber: '+639171234569',
+                        driverId: 'DRV-003',
+                        driverName: 'Maria Reyes',
+                        vehicle: 'Suzuki Raider 150',
+                        status: 'active',
+                        lastLocation: { lat: 14.5980, lng: 120.9830 },
+                        lastScanTime: new Date().toISOString(),
+                        isInTerminal: true,
+                        trackingEnabled: true,
+                        trackingExpiry: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+                        photo: 'https://randomuser.me/api/portraits/women/1.jpg'
+                    }
+                ];
+            },
+            
+            saveGPSTrackingDevices(devices) {
+                localStorage.setItem('gpsTrackingDevices', JSON.stringify(devices));
+            },
+            
+            // Will be replaced with actual database calls later
+            async saveToDatabase(table, data) {
+                console.log('📀 Would save to database:', table, data);
+                // TODO: Replace with actual database API calls
+                return { success: true, id: data.id || Math.random().toString(36).substr(2, 9) };
+            },
+            
+            async getFromDatabase(table, query) {
+                console.log('📀 Would query database:', table, query);
+                // TODO: Replace with actual database queries
+                return this.getGPSTrackingDevices();
+            }
+        };
+
+        // GPS Tracking with Privacy Protection
+        const gpsTracking = {
+            terminalGeofence: {
+                lat: 14.5995,
+                lng: 120.9842,
+                radius: 500 // meters
+            },
+            
+            // Initialize with mock data
+            init() {
+                this.devices = Database.getGPSTrackingDevices();
+                this.startAutoPolling();
+                this.updateActiveDriversDisplay();
+                this.initializeMap();
+            },
+            
+            // Initialize Leaflet map
+            initializeMap() {
+                // Initialize map
+                window.map = L.map('gps-map').setView([14.5995, 120.9842], 15);
+                window.markers = [];
+                
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(window.map);
+                
+                // Add terminal area circle
+                L.circle([this.terminalGeofence.lat, this.terminalGeofence.lng], {
+                    color: 'blue',
+                    fillColor: '#30f',
+                    fillOpacity: 0.1,
+                    radius: this.terminalGeofence.radius
+                }).addTo(window.map).bindPopup('FTI Terminal Area (500m radius)');
+                
+                // Add initial markers
+                this.devices.forEach(device => {
+                    if (device.isInTerminal && device.trackingEnabled) {
+                        this.updateMapMarker(device);
+                    }
+                });
+            },
+            
+            // Check if driver is within terminal area
+            isInTerminalArea(driverLat, driverLng) {
+                const R = 6371000; // Earth's radius in meters
+                const dLat = this.deg2rad(driverLat - this.terminalGeofence.lat);
+                const dLng = this.deg2rad(driverLng - this.terminalGeofence.lng);
+                
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                         Math.cos(this.deg2rad(this.terminalGeofence.lat)) * 
+                         Math.cos(this.deg2rad(driverLat)) *
+                         Math.sin(dLng/2) * Math.sin(dLng/2);
+                
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                const distance = R * c;
+                
+                return distance <= this.terminalGeofence.radius;
+            },
+            
+            deg2rad(deg) {
+                return deg * (Math.PI/180);
+            },
+            
+            // Simulate SMS location request
+            async requestLocation(gpsDevice) {
+                try {
+                    console.log(`📱 Sending location request to ${gpsDevice.driverName} (${gpsDevice.simNumber})`);
+                    
+                    // Simulate GPS response with slight location variation
+                    setTimeout(() => {
+                        const variation = (Math.random() - 0.5) * 0.002;
+                        const newLat = this.terminalGeofence.lat + variation;
+                        const newLng = this.terminalGeofence.lng + variation;
+                        
+                        this.processLocationUpdate(gpsDevice.simNumber, newLat, newLng);
+                    }, 2000);
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Failed to send location request:', error);
+                    return false;
+                }
+            },
+            
+            // Process incoming location data
+            processLocationUpdate(simNumber, latitude, longitude) {
+                const device = this.devices.find(d => d.simNumber === simNumber);
+                if (!device) return;
+                
+                const isInTerminal = this.isInTerminalArea(latitude, longitude);
+                const now = new Date();
+                
+                device.lastLocation = { lat: latitude, lng: longitude };
+                device.lastScanTime = now.toISOString();
+                device.isInTerminal = isInTerminal;
+                
+                if (isInTerminal) {
+                    // Reset tracking timer when driver enters terminal
+                    device.trackingEnabled = true;
+                    device.trackingExpiry = new Date(now.getTime() + 60 * 60 * 1000).toISOString();
+                    console.log(`📍 ${device.driverName} entered terminal area`);
+                }
+                
+                // Save to temporary storage (will be database later)
+                Database.saveGPSTrackingDevices(this.devices);
+                
+                this.updateMapMarker(device);
+                this.updateActiveDriversDisplay();
+            },
+            
+            // Check if tracking should be active
+            shouldTrackDevice(device) {
+                if (!device.trackingEnabled) return false;
+                
+                const now = new Date();
+                const expiry = new Date(device.trackingExpiry);
+                if (now > expiry) {
+                    device.trackingEnabled = false;
+                    Database.saveGPSTrackingDevices(this.devices);
+                    return false;
+                }
+                
+                return true;
+            },
+            
+            // Automated location polling
+            startAutoPolling() {
+                setInterval(() => {
+                    this.devices.forEach(device => {
+                        if (this.shouldTrackDevice(device)) {
+                            this.requestLocation(device);
+                        }
+                    });
+                }, 30000); // Every 30 seconds
+            },
+            
+            // Update map markers
+            updateMapMarker(device) {
+                // Clear existing marker for this device
+                const existingMarker = window.markers.find(m => m.deviceId === device.id);
+                if (existingMarker) {
+                    window.map.removeLayer(existingMarker.marker);
+                    window.markers = window.markers.filter(m => m.deviceId !== device.id);
+                }
+                
+                if (device.isInTerminal && device.trackingEnabled) {
+                    const marker = L.marker(device.lastLocation)
+                        .addTo(window.map)
                         .bindPopup(`
                             <div style="text-align: center;">
-                                <img src="${driver.photo}" alt="${driver.name}" style="width: 50px; height: 50px; border-radius: 50%;">
-                                <h3>${driver.name}</h3>
-                                <p>${driver.vehicle}<br>${driver.rfid}</p>
-                                <small>Last scan: ${driver.lastScan.toLocaleTimeString()}</small>
+                                <img src="${device.photo}" alt="${device.driverName}" style="width: 50px; height: 50px; border-radius: 50%;">
+                                <h3>${device.driverName}</h3>
+                                <p>${device.vehicle}<br>${device.id}</p>
+                                <small>Last update: ${new Date(device.lastScanTime).toLocaleTimeString()}</small>
                             </div>
                         `);
                     
-                    markers.push(marker);
+                    window.markers.push({ deviceId: device.id, marker: marker });
                 }
+            },
+            
+            // Update active drivers display
+            updateActiveDriversDisplay() {
+                const activeDevices = this.devices.filter(device => 
+                    device.isInTerminal && device.trackingEnabled
+                );
+                
+                document.getElementById('active-drivers-count').textContent = 
+                    `Active Drivers: ${activeDevices.length}/${this.devices.length}`;
+                
+                document.getElementById('tracking-status').textContent = 
+                    activeDevices.length > 0 ? 'Active' : 'No Active Drivers';
+                
+                document.getElementById('drivers-count').textContent = activeDevices.length;
+                
+                // Update drivers list
+                const driversList = document.getElementById('drivers-list');
+                driversList.innerHTML = '';
+                
+                activeDevices.forEach(device => {
+                    const driverCard = document.createElement('div');
+                    driverCard.className = 'driver-card';
+                    driverCard.innerHTML = `
+                        <img src="${device.photo}" alt="${device.driverName}" class="driver-photo">
+                        <div class="driver-info">
+                            <div class="driver-name">${device.driverName}</div>
+                            <div class="driver-meta">${device.vehicle} • ${device.id}</div>
+                        </div>
+                        <div class="driver-status status-active">📍 Tracking</div>
+                    `;
+                    driversList.appendChild(driverCard);
+                });
+                
+                if (activeDevices.length === 0) {
+                    driversList.innerHTML = '<p style="text-align: center; color: #666;">No active drivers in terminal area</p>';
+                }
+            }
+        };
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get current admin name
+            document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
+            
+            // Initialize GPS tracking
+            gpsTracking.init();
+            
+            // Manual refresh button
+            document.getElementById('manual-location-refresh').addEventListener('click', function() {
+                gpsTracking.devices.forEach(device => {
+                    if (gpsTracking.shouldTrackDevice(device)) {
+                        gpsTracking.requestLocation(device);
+                    }
+                });
+                alert('Location requests sent to all active drivers!');
             });
             
-            // Update last update time
-            document.getElementById('last-update-time').textContent = new Date().toLocaleTimeString();
-        }
-        
-        // Initial map update
-        updateMapMarkers();
-        
-        // Refresh locations button
-        document.getElementById('refresh-locations').addEventListener('click', function() {
-            // Simulate location updates (in a real app, this would fetch from your backend)
-            driverLocations.forEach(driver => {
-                if (driver.status === "active") {
-                    // Add small random movement to simulate driving
-                    const latChange = (Math.random() - 0.5) * 0.002;
-                    const lngChange = (Math.random() - 0.5) * 0.002;
-                    driver.position[0] += latChange;
-                    driver.position[1] += lngChange;
-                }
+            // View geofence button
+            document.getElementById('view-geofence').addEventListener('click', function() {
+                window.map.setView([14.5995, 120.9842], 15);
+                alert('Centered map on terminal area (500m radius)');
             });
             
-            updateMapMarkers();
-            alert("Locations updated successfully!");
-        });
-        
-        // Logout functionality
-        document.querySelector('.logout-btn').addEventListener('click', function() {
-            localStorage.removeItem('currentAdmin');
-            window.location.href = 'FTI Log&Sign.html';
+            // Tracking interval selector
+            document.getElementById('tracking-interval').addEventListener('change', function() {
+                const interval = parseInt(this.value) * 1000;
+                alert(`Tracking interval set to ${this.value} seconds. Will apply after page refresh.`);
+            });
+            
+            // Logout functionality
+            document.querySelector('.logout-btn').addEventListener('click', function() {
+                localStorage.removeItem('currentAdmin');
+                window.location.href = 'FTI Log&Sign.html';
+            });
         });
     </script>
-    <button class="back-btn" onclick="window.history.back()">
-        ← Back
-    </button>
-    <footer>
-        <p>Created by Bacanto, Nacion, and Tan</p>
-    </footer>
 </body>
 </html>

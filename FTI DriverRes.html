@@ -12,6 +12,8 @@
             --light-color: #FFF8E1;  /* Light amber background */
             --dark-color: #5D4037;  /* Brown for text */
             --admin-color: #673AB7;  /* Purple for admin */
+            --success-color: #689F38;  /* Green for success */
+            --danger-color: #D32F2F;  /* Red for errors */
         }
         
         * {
@@ -248,6 +250,15 @@
             display: none;
             margin: 0 auto;
         }
+        
+        .instruction-box {
+            background: #FFF9C4;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
         footer {
             text-align: center;
             padding: 1px;
@@ -275,7 +286,7 @@
     <main>
         <div class="registration-container">
             <h1 class="page-title">Driver Registration</h1>
-            <p class="page-description">Register new tricycle drivers with their complete information and vehicle details.</p>
+            <p class="page-description">Register new tricycle drivers with their complete information and vehicle details. GPS tracking will be automatically configured.</p>
             
             <form id="driver-registration-form">
                 <!-- Personal Information Section -->
@@ -343,20 +354,6 @@
                 <div class="form-section">
                     <h2 class="section-title">Government Identification</h2>
                     <div class="form-grid">
-                        <!-- 
-                        <div class="form-group">
-                            <label for="tin">TIN Number</label>
-                            <input type="text" id="tin">
-                        </div>
-                        <div class="form-group">
-                            <label for="sss">SSS Number</label>
-                            <input type="text" id="sss">
-                        </div>
-                        <div class="form-group">
-                            <label for="philhealth">PhilHealth Number</label>
-                            <input type="text" id="philhealth">
-                        </div>
-                        -->
                         <div class="form-group">
                             <label for="license" class="required-field">Driver's License Number</label>
                             <input type="text" id="license" required>
@@ -388,135 +385,15 @@
                             <label for="plate-number" class="required-field">Plate Number</label>
                             <input type="text" id="plate-number" required>
                         </div>
-                        <div class="form-group">
-                            <label for="rfid-tag" class="required-field">RFID Tag Number</label>
-                            <input type="text" id="rfid-tag" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="or-number">OR Number</label>
-                            <input type="text" id="or-number">
-                        </div>
-                        <div class="form-group">
-                            <label for="cr-number">CR Number</label>
-                            <input type="text" id="cr-number">
-                        </div>
                     </div>
                 </div>
                 
-                <!-- Photo Upload Section -->
+                <!-- GPS Device Information Section -->
                 <div class="form-section">
-                    <h2 class="section-title">Driver Photo</h2>
-                    <div class="form-group">
-                        <div class="photo-upload" id="photo-upload-area">
-                            <div class="photo-upload-icon">📷</div>
-                            <p>Click to upload driver photo</p>
-                            <p><small>Recommended size: 300x300 pixels</small></p>
-                            <img id="photo-preview" class="photo-preview" alt="Driver photo preview">
+                    <h2 class="section-title">GPS Device Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="gps-sim" class="required-field">GPS SIM Number</label>
+                            <input type="tel" id="gps-sim" placeholder="+639171234567" required>
                         </div>
-                        <input type="file" id="driver-photo" accept="image/*" style="display: none;">
-                    </div>
-                </div>
-                
-                <!-- Terms and Conditions -->
-                <div class="form-section">
-                    <div class="form-group">
-                        <input type="checkbox" id="terms" required>
-                        <label for="terms" class="required-field">I certify that all information provided is true and correct.</label>
-                    </div>
-                </div>
-                
-                <!-- Form Actions -->
-                <div class="form-actions">
-                    <button type="button" class="btn">Cancel</button>
-                    <button type="submit" class="btn btn-submit">Register Driver</button>
-                </div>
-            </form>
-        </div>
-    </main>
-
-    <script>
-        // Get current admin name (from localStorage or default)
-        document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
-        
-        // Photo upload functionality
-        const photoUpload = document.getElementById('photo-upload-area');
-        const fileInput = document.getElementById('driver-photo');
-        const photoPreview = document.getElementById('photo-preview');
-        
-        photoUpload.addEventListener('click', function() {
-            fileInput.click();
-        });
-        
-        fileInput.addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                
-                reader.onload = function(event) {
-                    photoPreview.src = event.target.result;
-                    photoPreview.style.display = 'block';
-                    photoUpload.querySelector('p').style.display = 'none';
-                    photoUpload.querySelector('.photo-upload-icon').style.display = 'none';
-                };
-                
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        // Form submission
-        document.getElementById('driver-registration-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Form validation
-            const requiredFields = document.querySelectorAll('[required]');
-            let isValid = true;
-            
-            requiredFields.forEach(field => {
-                if (!field.value) {
-                    field.style.borderColor = 'var(--danger-color)';
-                    isValid = false;
-                } else {
-                    field.style.borderColor = '';
-                }
-            });
-            
-            if (isValid) {
-                alert('Driver registration submitted successfully!');
-                // In real app, you would send data to server here
-                // console.log('Form data:', getFormData());
-                // this.reset();
-                // photoPreview.style.display = 'none';
-                // photoUpload.querySelector('p').style.display = '';
-                // photoUpload.querySelector('.photo-upload-icon').style.display = '';
-            } else {
-                alert('Please fill in all required fields.');
-            }
-        });
-        
-        // Helper function to get form data (for demo)
-        function getFormData() {
-            const form = document.getElementById('driver-registration-form');
-            const formData = new FormData(form);
-            const data = {};
-            
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-            
-            return data;
-        }
-        
-        // Logout functionality
-        document.querySelector('.logout-btn').addEventListener('click', function() {
-            localStorage.removeItem('currentAdmin');
-            window.location.href = 'FTI Log&Sign.html';
-        });
-    </script>
-    <button class="back-btn" onclick="window.history.back()">
-            ← Back
-        </button>
-         <footer>
-    <p>Created by Bacanto, Nacion, and Tan</p>
-</footer>
-</body>
-</html>
+                        <div class="form-group">
