@@ -6,14 +6,15 @@
     <title>FTI ARCA SOUTH TRICYCLE TERMINAL - Admin Login</title>
     <style>
         :root {
-            --primary-color: #FFC107;  /* Amber yellow */
-            --secondary-color: #FFA000;  /* Darker amber */
-            --accent-color: #FF6F00;  /* Deep orange accent */
-            --light-color: #FFF8E1;  /* Light amber background */
-            --dark-color: #5D4037;  /* Brown for text */
-            --success-color: #689F38;  /* Green for success */
-            --danger-color: #D32F2F;  /* Red for errors */
-            --admin-color: #673AB7;  /* Purple for admin elements */
+            --primary-color: #2C3E50;  /* Professional dark blue */
+            --secondary-color: #3498DB;  /* Professional blue */
+            --accent-color: #1ABC9C;  /* Teal accent */
+            --light-color: #F8F9FA;  /* Light gray background */
+            --dark-color: #2C3E50;  /* Dark blue for text */
+            --success-color: #27AE60;  /* Green for success */
+            --danger-color: #E74C3C;  /* Red for errors */
+            --admin-color: #8E44AD;  /* Professional purple for admin elements */
+            --border-color: #E0E0E0;  /* Light gray for borders */
         }
         
         * {
@@ -24,7 +25,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+            background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -37,14 +38,13 @@
             max-width: 500px;
             padding: 3rem;
             background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
             text-align: center;
             animation: fadeIn 0.5s ease-out;
-            border: 2px solid var(--admin-color);
+            border: 1px solid var(--border-color);
         }
-   
-
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -53,20 +53,20 @@
         .logo {
             margin-bottom: 2.5rem;
             padding-bottom: 1.5rem;
-            border-bottom: 2px solid var(--admin-color);
+            border-bottom: 1px solid var(--border-color);
         }
         
         .logo h1 {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--admin-color);
+            color: var(--primary-color);
             letter-spacing: 1px;
             margin-bottom: 0.75rem;
         }
         
         .terminal-badge {
             display: inline-block;
-            background-color: var(--admin-color);
+            background-color: var(--primary-color);
             color: white;
             padding: 0.4rem 0.8rem;
             border-radius: 6px;
@@ -102,17 +102,17 @@
         .form-group input {
             width: 100%;
             padding: 1rem;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 1.05rem;
             transition: all 0.3s ease;
-            background-color: #FFFDE7;
+            background-color: #FFFFFF;
         }
         
         .form-group input:focus {
             border-color: var(--admin-color);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.2);
+            box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
         }
         
         .btn {
@@ -130,8 +130,9 @@
         }
         
         .btn:hover {
-            background-color: #5E35B1;
+            background-color: #7D3C98;
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .alert {
@@ -143,26 +144,33 @@
         }
         
         .alert-success {
-            background-color: rgba(104, 159, 56, 0.2);
+            background-color: rgba(39, 174, 96, 0.1);
             color: var(--success-color);
-            border: 1px solid rgba(104, 159, 56, 0.3);
+            border: 1px solid rgba(39, 174, 96, 0.2);
         }
         
         .alert-danger {
-            background-color: rgba(211, 47, 47, 0.2);
+            background-color: rgba(231, 76, 60, 0.1);
             color: var(--danger-color);
-            border: 1px solid rgba(211, 47, 47, 0.3);
+            border: 1px solid rgba(231, 76, 60, 0.2);
         }
         
         footer {
             text-align: center;
             padding: 1px;
-            background-color: #FFF9C4;
-            color: #7e7d7d;
+            background-color: #F8F9FA;
+            color: #6C757D;
             font-size: 14px;
             position: fixed;
             bottom: 0;
             width: 100%;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Subtle hover effect for the container */
+        .container:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
         }
     </style>
 </head>
@@ -171,48 +179,53 @@
         <div class="logo">
             <h1>FTI ARCA SOUTH <span class="admin-badge">ADMIN</span></h1>
             <div class="terminal-badge">TRICYCLE TERMINAL SYSTEM</div>
-            <p id="subtitle">Administrator access only</p>
+            <p id="subtitle" style="color: #6C757D; margin-top: 10px;">Administrator access only</p>
         </div>
         
         <!-- Admin Login Form -->
-    <div id="login-tab">
-        <div id="login-alert" class="alert"></div>
-        
-        <form id="login-form" onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label for="login-adminname">Admin Name</label>
-                <input type="text" id="login-adminname" placeholder="Enter admin name" required>
-            </div>
+        <div id="login-tab">
+            <div id="login-alert" class="alert"></div>
+            
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-adminname">Admin Name</label>
+                    <input type="text" id="login-adminname" placeholder="Enter admin name" required>
+                </div>
 
-            <div class="form-group">
-                <label for="login-adminnumber">Admin Number</label>
-                <input type="number" id="login-adminnumber" placeholder="Enter admin number" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="login-password">Password</label>
-                <input type="password" id="login-password" placeholder="Enter your password" required>
-            </div>
-            
-            <button type="submit" class="btn">Admin Login</button>
-        </form>
+                <div class="form-group">
+                    <label for="login-adminnumber">Admin Number</label>
+                    <input type="number" id="login-adminnumber" placeholder="Enter admin number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                </div>
+                
+                <button type="submit" class="btn">Admin Login</button>
+            </form>
+        </div>
     </div>
 
+    <footer>
+        <p>Created by Bacanto, Nacion, and Tan</p>
+    </footer>
 
     <script>
         // Form submission handler
         function handleLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
+            const adminName = document.getElementById('login-adminname').value;
+            const adminNumber = document.getElementById('login-adminnumber').value;
             const password = document.getElementById('login-password').value;
             
             const alert = document.getElementById('login-alert');
-            alert.textContent = `Admin login attempt for ${email} (simulated)`;
+            alert.textContent = `Admin login attempt for ${adminName} (simulated)`;
             alert.classList.add('alert-success');
             alert.style.display = 'block';
             
             // In a real app, you would send this to a server
-            console.log('Admin login attempt:', { email, password });
+            console.log('Admin login attempt:', { adminName, adminNumber, password });
             
             // Simulate successful login redirect
             setTimeout(() => {
@@ -220,8 +233,5 @@
             }, 1500);
         }
     </script>
-     <footer>
-    <p>Created by Bacanto, Nacion, and Tan</p>
-</footer>
 </body>
 </html>

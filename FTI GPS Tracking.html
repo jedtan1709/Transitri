@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FTI ARCA SOUTH - GPS Tracking</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         :root {
-            --primary-color: #FFC107;
-            --secondary-color: #FFA000;
-            --accent-color: #FF6F00;
-            --light-color: #FFF8E1;
-            --dark-color: #5D4037;
-            --admin-color: #673AB7;
-            --success-color: #689F38;
-            --danger-color: #D32F2F;
+            --primary-color: #2C3E50;
+            --secondary-color: #3498DB;
+            --accent-color: #1ABC9C;
+            --light-color: #F8F9FA;
+            --dark-color: #2C3E50;
+            --admin-color: #8E44AD;
+            --success-color: #27AE60;
+            --danger-color: #E74C3C;
+            --warning-color: #F39C12;
+            --border-color: #E0E0E0;
         }
         
         * {
@@ -24,21 +27,22 @@
         }
         
         body {
-            background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+            background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
             min-height: 100vh;
             padding: 20px;
+            color: var(--dark-color);
         }
         
         header {
             background-color: white;
             padding: 1.5rem;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             margin-bottom: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border-color);
         }
         
         .logo {
@@ -49,13 +53,13 @@
         .logo h1 {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--dark-color);
+            color: var(--primary-color);
             margin-right: 1.5rem;
         }
         
         .terminal-badge {
             background-color: var(--primary-color);
-            color: var(--dark-color);
+            color: white;
             padding: 0.4rem 0.8rem;
             border-radius: 6px;
             font-size: 0.95rem;
@@ -65,10 +69,10 @@
         .user-info {
             display: flex;
             align-items: center;
+            gap: 1rem;
         }
         
         .user-info span {
-            margin-right: 1rem;
             color: var(--dark-color);
             font-weight: 500;
         }
@@ -79,7 +83,7 @@
         }
         
         .logout-btn {
-            background-color: var(--accent-color);
+            background-color: var(--admin-color);
             color: white;
             border: none;
             padding: 0.5rem 1rem;
@@ -90,12 +94,14 @@
         }
         
         .logout-btn:hover {
-            background-color: #E65100;
+            background-color: #7D3C98;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
+        
         .back-btn {
             background-color: var(--primary-color);
-            color: var(--dark-color);
+            color: white;
             border: none;
             padding: 0.5rem 1rem;
             border-radius: 6px;
@@ -106,33 +112,35 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            text-decoration: none;
         }
         
         .back-btn:hover {
-            background-color: var(--secondary-color);
-            color: white;
+            background-color: #1E2A36;
+            transform: translateY(-2px);
         }
-        
+
         .tracking-container {
             background-color: white;
             border-radius: 10px;
             padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             margin-bottom: 2rem;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border-color);
         }
         
         .page-title {
-            color: var(--dark-color);
-            margin-bottom: 1.5rem;
+            color: var(--admin-color);
+            margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--primary-color);
+            border-bottom: 2px solid var(--admin-color);
         }
         
         .page-description {
             color: var(--dark-color);
             opacity: 0.8;
             margin-bottom: 2rem;
+            line-height: 1.5;
         }
         
         .tracking-controls {
@@ -160,14 +168,23 @@
             background-color: var(--success-color);
         }
         
+        .status-inactive {
+            background-color: var(--danger-color);
+        }
+        
+        .status-pending {
+            background-color: var(--warning-color);
+        }
+        
         .gps-controls {
             display: flex;
             gap: 1rem;
             align-items: center;
+            flex-wrap: wrap;
         }
         
-        .refresh-btn {
-            background-color: var(--success-color);
+        .btn {
+            background-color: var(--secondary-color);
             color: white;
             border: none;
             padding: 0.8rem 1.5rem;
@@ -181,18 +198,26 @@
             gap: 0.5rem;
         }
         
-        .refresh-btn:hover {
-            background-color: #558B2F;
+        .btn:hover {
+            background-color: #2980B9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .btn {
-            background-color: var(--primary-color);
-            color: var(--dark-color);
-            border: none;
-            padding: 0.6rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background-color: #E67E22;
         }
         
         .map-container {
@@ -200,7 +225,8 @@
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 2rem;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
+            position: relative;
         }
         
         #gps-map {
@@ -208,10 +234,22 @@
             height: 100%;
         }
         
+        .map-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
         .active-drivers-list {
-            background-color: #FFF9C4;
+            background-color: var(--light-color);
             border-radius: 10px;
             padding: 1.5rem;
+            border: 1px solid var(--border-color);
         }
         
         .active-drivers-list h3 {
@@ -234,7 +272,13 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+        
+        .driver-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .driver-photo {
@@ -242,6 +286,7 @@
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
+            border: 2px solid var(--border-color);
         }
         
         .driver-info {
@@ -251,6 +296,7 @@
         .driver-name {
             font-weight: 600;
             color: var(--dark-color);
+            margin-bottom: 0.2rem;
         }
         
         .driver-meta {
@@ -266,37 +312,79 @@
         }
         
         .status-active {
-            background-color: rgba(104, 159, 56, 0.2);
+            background-color: rgba(39, 174, 96, 0.2);
             color: var(--success-color);
         }
         
         .status-inactive {
-            background-color: rgba(211, 47, 47, 0.2);
+            background-color: rgba(231, 76, 60, 0.2);
             color: var(--danger-color);
+        }
+        
+        .status-pending {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning-color);
+        }
+        
+        .notification {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .notification-success {
+            background-color: rgba(39, 174, 96, 0.1);
+            border-left: 4px solid var(--success-color);
+            color: var(--success-color);
+        }
+        
+        .notification-error {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+        
+        .notification-warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--warning-color);
+            color: var(--warning-color);
         }
         
         footer {
             text-align: center;
-            padding: 1px;
-            background-color: #FFF9C4;
-            color: #7e7d7d;
+            padding: 1rem;
+            background-color: var(--light-color);
+            color: #6C757D;
             font-size: 14px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+            border-radius: 0 0 10px 10px;
         }
         
         @media (max-width: 768px) {
             .tracking-controls {
                 flex-direction: column;
+                align-items: flex-start;
             }
             
             .map-container {
                 height: 300px;
             }
+            
+            .gps-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .driver-card {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
     <header>
@@ -311,27 +399,34 @@
     </header>
     
     <main>
+        <a href="FTI Home.html" class="back-btn">← Back to Dashboard</a>
+        
         <div class="tracking-container">
             <h1 class="page-title">04.10 Real-Time GPS Tracking</h1>
             <p class="page-description">Monitor active drivers in real-time. GPS tracking is only available for drivers who are within the terminal area (500m radius). Tracking automatically stops 1 hour after leaving the terminal.</p>
             
+            <div id="notification-area"></div>
+            
             <div class="tracking-controls">
                 <div class="tracking-status">
-                    <div class="status-indicator status-active"></div>
+                    <div class="status-indicator status-active" id="status-indicator"></div>
                     <span>GPS Tracking: <strong id="tracking-status">Active</strong></span>
                     <span id="active-drivers-count">Active Drivers: 0/0</span>
                 </div>
                 
                 <div class="gps-controls">
-                    <button class="btn" id="manual-location-refresh">
+                    <button class="btn btn-success" id="manual-location-refresh">
                         🔄 Request Locations
                     </button>
                     <button class="btn" id="view-geofence">
                         🗺️ View Terminal Area
                     </button>
+                    <button class="btn btn-warning" id="emergency-alert">
+                        🚨 Emergency Alert
+                    </button>
                     <select id="tracking-interval">
                         <option value="30">30 seconds</option>
-                        <option value="60">1 minute</option>
+                        <option value="60" selected>1 minute</option>
                         <option value="300">5 minutes</option>
                     </select>
                 </div>
@@ -339,6 +434,10 @@
             
             <div class="map-container">
                 <div id="gps-map"></div>
+                <div class="map-overlay">
+                    <div>Terminal Radius: <strong>500m</strong></div>
+                    <div>Active Drivers: <strong id="map-driver-count">0</strong></div>
+                </div>
             </div>
             
             <div class="active-drivers-list">
@@ -350,19 +449,63 @@
         </div>
     </main>
 
-    <button class="back-btn" onclick="window.history.back()">← Back</button>
-    <footer><p>Created by Bacanto, Nacion, and Tan</p></footer>
+    <footer>
+        <p>Created by Bacanto, Nacion, and Tan</p>
+    </footer>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        // Mock database simulation using localStorage
-        const Database = {
-            // GPS Devices temporary storage
-            getGPSTrackingDevices() {
+        // Enhanced GPS Tracking System with Better Error Handling and Security
+        const GPSTrackingSystem = {
+            terminalGeofence: {
+                lat: 14.5995,
+                lng: 120.9842,
+                radius: 500 // meters
+            },
+            devices: [],
+            pollingInterval: null,
+            map: null,
+            markers: [],
+            
+            // Initialize the system
+            init() {
+                // Check if user is authenticated
+                if (!this.isAuthenticated()) {
+                    window.location.href = 'FTI Log&Sign.html';
+                    return;
+                }
+                
+                // Load devices from storage
+                this.devices = this.loadDevices();
+                
+                // Initialize the map
+                this.initializeMap();
+                
+                // Start tracking
+                this.startTracking();
+                
+                // Update UI
+                this.updateUI();
+                
+                // Set up event listeners
+                this.setupEventListeners();
+                
+                // Show welcome notification
+                this.showNotification('GPS Tracking System initialized successfully', 'success');
+            },
+            
+            // Check if user is authenticated
+            isAuthenticated() {
+                const currentAdmin = localStorage.getItem('currentAdmin');
+                return currentAdmin && currentAdmin !== '';
+            },
+            
+            // Load devices from storage (simulating database)
+            loadDevices() {
                 const stored = localStorage.getItem('gpsTrackingDevices');
                 if (stored) return JSON.parse(stored);
                 
-                // Default mock data - will be replaced by real database later
+                // Default mock data
                 return [
                     {
                         id: 'GPS-001',
@@ -409,50 +552,20 @@
                 ];
             },
             
-            saveGPSTrackingDevices(devices) {
-                localStorage.setItem('gpsTrackingDevices', JSON.stringify(devices));
+            // Save devices to storage
+            saveDevices() {
+                localStorage.setItem('gpsTrackingDevices', JSON.stringify(this.devices));
             },
             
-            // Will be replaced with actual database calls later
-            async saveToDatabase(table, data) {
-                console.log('📀 Would save to database:', table, data);
-                // TODO: Replace with actual database API calls
-                return { success: true, id: data.id || Math.random().toString(36).substr(2, 9) };
-            },
-            
-            async getFromDatabase(table, query) {
-                console.log('📀 Would query database:', table, query);
-                // TODO: Replace with actual database queries
-                return this.getGPSTrackingDevices();
-            }
-        };
-
-        // GPS Tracking with Privacy Protection
-        const gpsTracking = {
-            terminalGeofence: {
-                lat: 14.5995,
-                lng: 120.9842,
-                radius: 500 // meters
-            },
-            
-            // Initialize with mock data
-            init() {
-                this.devices = Database.getGPSTrackingDevices();
-                this.startAutoPolling();
-                this.updateActiveDriversDisplay();
-                this.initializeMap();
-            },
-            
-            // Initialize Leaflet map
+            // Initialize the map
             initializeMap() {
-                // Initialize map
-                window.map = L.map('gps-map').setView([14.5995, 120.9842], 15);
-                window.markers = [];
+                // Create map
+                this.map = L.map('gps-map').setView([this.terminalGeofence.lat, this.terminalGeofence.lng], 15);
                 
-                // Add OpenStreetMap tiles
+                // Add tile layer
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(window.map);
+                }).addTo(this.map);
                 
                 // Add terminal area circle
                 L.circle([this.terminalGeofence.lat, this.terminalGeofence.lng], {
@@ -460,25 +573,123 @@
                     fillColor: '#30f',
                     fillOpacity: 0.1,
                     radius: this.terminalGeofence.radius
-                }).addTo(window.map).bindPopup('FTI Terminal Area (500m radius)');
+                }).addTo(this.map).bindPopup('FTI Terminal Area (500m radius)');
+            },
+            
+            // Start tracking with the selected interval
+            startTracking() {
+                // Clear any existing interval
+                if (this.pollingInterval) {
+                    clearInterval(this.pollingInterval);
+                }
                 
-                // Add initial markers
+                // Get selected interval
+                const intervalSelect = document.getElementById('tracking-interval');
+                const intervalSeconds = parseInt(intervalSelect.value);
+                
+                // Start new interval
+                this.pollingInterval = setInterval(() => {
+                    this.pollDeviceLocations();
+                }, intervalSeconds * 1000);
+                
+                // Do an initial poll
+                this.pollDeviceLocations();
+                
+                this.showNotification(`Tracking interval set to ${intervalSeconds} seconds`, 'success');
+            },
+            
+            // Poll all devices for location updates
+            pollDeviceLocations() {
                 this.devices.forEach(device => {
-                    if (device.isInTerminal && device.trackingEnabled) {
-                        this.updateMapMarker(device);
+                    if (this.shouldTrackDevice(device)) {
+                        this.requestLocationUpdate(device);
                     }
                 });
             },
             
-            // Check if driver is within terminal area
-            isInTerminalArea(driverLat, driverLng) {
+            // Check if a device should be tracked
+            shouldTrackDevice(device) {
+                if (!device.trackingEnabled) return false;
+                
+                const now = new Date();
+                const expiry = new Date(device.trackingExpiry);
+                if (now > expiry) {
+                    device.trackingEnabled = false;
+                    this.saveDevices();
+                    return false;
+                }
+                
+                return true;
+            },
+            
+            // Request location update from a device
+            async requestLocationUpdate(device) {
+                try {
+                    // Simulate API call to device
+                    const success = await this.simulateLocationRequest(device);
+                    
+                    if (success) {
+                        // Simulate receiving location data
+                        setTimeout(() => {
+                            this.processLocationUpdate(device, this.generateMockLocation());
+                        }, 2000);
+                    } else {
+                        console.error(`Failed to request location from ${device.driverName}`);
+                    }
+                } catch (error) {
+                    console.error(`Error requesting location from ${device.driverName}:`, error);
+                    this.showNotification(`Failed to get location from ${device.driverName}`, 'error');
+                }
+            },
+            
+            // Simulate a location request to a device
+            simulateLocationRequest(device) {
+                return new Promise((resolve) => {
+                    // 90% success rate simulation
+                    setTimeout(() => {
+                        resolve(Math.random() < 0.9);
+                    }, 500);
+                });
+            },
+            
+            // Generate a mock location near the terminal
+            generateMockLocation() {
+                const variation = (Math.random() - 0.5) * 0.002;
+                return {
+                    lat: this.terminalGeofence.lat + variation,
+                    lng: this.terminalGeofence.lng + variation
+                };
+            },
+            
+            // Process a location update from a device
+            processLocationUpdate(device, location) {
+                const isInTerminal = this.isInTerminalArea(location.lat, location.lng);
+                const now = new Date();
+                
+                device.lastLocation = location;
+                device.lastScanTime = now.toISOString();
+                device.isInTerminal = isInTerminal;
+                
+                if (isInTerminal) {
+                    // Reset tracking timer when driver enters terminal
+                    device.trackingEnabled = true;
+                    device.trackingExpiry = new Date(now.getTime() + 60 * 60 * 1000).toISOString();
+                }
+                
+                this.saveDevices();
+                this.updateMapMarker(device);
+                this.updateUI();
+            },
+            
+            // Check if a location is within the terminal area
+            isInTerminalArea(lat, lng) {
                 const R = 6371000; // Earth's radius in meters
-                const dLat = this.deg2rad(driverLat - this.terminalGeofence.lat);
-                const dLng = this.deg2rad(driverLng - this.terminalGeofence.lng);
+                const dLat = this.deg2rad(lat - this.terminalGeofence.lat);
+                const dLng = this.deg2rad(lng - this.terminalGeofence.lng);
                 
                 const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
                          Math.cos(this.deg2rad(this.terminalGeofence.lat)) * 
-                         Math.cos(this.deg2rad(driverLat)) *
+                         Math.cos(this.deg2rad(lat)) *
                          Math.sin(dLng/2) * Math.sin(dLng/2);
                 
                 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
@@ -487,181 +698,175 @@
                 return distance <= this.terminalGeofence.radius;
             },
             
+            // Convert degrees to radians
             deg2rad(deg) {
                 return deg * (Math.PI/180);
             },
             
-            // Simulate SMS location request
-            async requestLocation(gpsDevice) {
-                try {
-                    console.log(`📱 Sending location request to ${gpsDevice.driverName} (${gpsDevice.simNumber})`);
-                    
-                    // Simulate GPS response with slight location variation
-                    setTimeout(() => {
-                        const variation = (Math.random() - 0.5) * 0.002;
-                        const newLat = this.terminalGeofence.lat + variation;
-                        const newLng = this.terminalGeofence.lng + variation;
-                        
-                        this.processLocationUpdate(gpsDevice.simNumber, newLat, newLng);
-                    }, 2000);
-                    
-                    return true;
-                } catch (error) {
-                    console.error('Failed to send location request:', error);
-                    return false;
-                }
-            },
-            
-            // Process incoming location data
-            processLocationUpdate(simNumber, latitude, longitude) {
-                const device = this.devices.find(d => d.simNumber === simNumber);
-                if (!device) return;
-                
-                const isInTerminal = this.isInTerminalArea(latitude, longitude);
-                const now = new Date();
-                
-                device.lastLocation = { lat: latitude, lng: longitude };
-                device.lastScanTime = now.toISOString();
-                device.isInTerminal = isInTerminal;
-                
-                if (isInTerminal) {
-                    // Reset tracking timer when driver enters terminal
-                    device.trackingEnabled = true;
-                    device.trackingExpiry = new Date(now.getTime() + 60 * 60 * 1000).toISOString();
-                    console.log(`📍 ${device.driverName} entered terminal area`);
-                }
-                
-                // Save to temporary storage (will be database later)
-                Database.saveGPSTrackingDevices(this.devices);
-                
-                this.updateMapMarker(device);
-                this.updateActiveDriversDisplay();
-            },
-            
-            // Check if tracking should be active
-            shouldTrackDevice(device) {
-                if (!device.trackingEnabled) return false;
-                
-                const now = new Date();
-                const expiry = new Date(device.trackingExpiry);
-                if (now > expiry) {
-                    device.trackingEnabled = false;
-                    Database.saveGPSTrackingDevices(this.devices);
-                    return false;
-                }
-                
-                return true;
-            },
-            
-            // Automated location polling
-            startAutoPolling() {
-                setInterval(() => {
-                    this.devices.forEach(device => {
-                        if (this.shouldTrackDevice(device)) {
-                            this.requestLocation(device);
-                        }
-                    });
-                }, 30000); // Every 30 seconds
-            },
-            
-            // Update map markers
+            // Update a device's marker on the map
             updateMapMarker(device) {
-                // Clear existing marker for this device
-                const existingMarker = window.markers.find(m => m.deviceId === device.id);
-                if (existingMarker) {
-                    window.map.removeLayer(existingMarker.marker);
-                    window.markers = window.markers.filter(m => m.deviceId !== device.id);
+                // Remove existing marker
+                const existingMarkerIndex = this.markers.findIndex(m => m.deviceId === device.id);
+                if (existingMarkerIndex !== -1) {
+                    this.map.removeLayer(this.markers[existingMarkerIndex].marker);
+                    this.markers.splice(existingMarkerIndex, 1);
                 }
                 
+                // Add new marker if device is in terminal and tracking is enabled
                 if (device.isInTerminal && device.trackingEnabled) {
                     const marker = L.marker(device.lastLocation)
-                        .addTo(window.map)
-                        .bindPopup(`
-                            <div style="text-align: center;">
-                                <img src="${device.photo}" alt="${device.driverName}" style="width: 50px; height: 50px; border-radius: 50%;">
-                                <h3>${device.driverName}</h3>
-                                <p>${device.vehicle}<br>${device.id}</p>
-                                <small>Last update: ${new Date(device.lastScanTime).toLocaleTimeString()}</small>
-                            </div>
-                        `);
+                        .addTo(this.map)
+                        .bindPopup(this.createMarkerPopup(device));
                     
-                    window.markers.push({ deviceId: device.id, marker: marker });
+                    this.markers.push({ deviceId: device.id, marker });
                 }
             },
             
-            // Update active drivers display
-            updateActiveDriversDisplay() {
+            // Create popup content for a marker
+            createMarkerPopup(device) {
+                return `
+                    <div style="text-align: center; min-width: 200px;">
+                        <img src="${device.photo}" alt="${device.driverName}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                        <h3 style="margin: 10px 0 5px;">${device.driverName}</h3>
+                        <p style="margin: 0 0 5px;">${device.vehicle}<br>${device.id}</p>
+                        <small>Last update: ${new Date(device.lastScanTime).toLocaleTimeString()}</small>
+                        <div style="margin-top: 10px;">
+                            <button onclick="GPSTrackingSystem.sendMessage('${device.id}')" style="background: #3498db; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Send Message</button>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            // Send a message to a driver
+            sendMessage(deviceId) {
+                const device = this.devices.find(d => d.id === deviceId);
+                if (device) {
+                    const message = prompt(`Send message to ${device.driverName}:`, "Please return to terminal");
+                    if (message) {
+                        this.showNotification(`Message sent to ${device.driverName}`, 'success');
+                        // In a real implementation, this would send an SMS or push notification
+                    }
+                }
+            },
+            
+            // Update the UI with current data
+            updateUI() {
                 const activeDevices = this.devices.filter(device => 
                     device.isInTerminal && device.trackingEnabled
                 );
                 
+                // Update tracking status
                 document.getElementById('active-drivers-count').textContent = 
                     `Active Drivers: ${activeDevices.length}/${this.devices.length}`;
                 
                 document.getElementById('tracking-status').textContent = 
                     activeDevices.length > 0 ? 'Active' : 'No Active Drivers';
                 
+                document.getElementById('status-indicator').className = 
+                    activeDevices.length > 0 ? 'status-indicator status-active' : 'status-indicator status-inactive';
+                
+                // Update driver count
                 document.getElementById('drivers-count').textContent = activeDevices.length;
+                document.getElementById('map-driver-count').textContent = activeDevices.length;
                 
                 // Update drivers list
+                this.updateDriversList(activeDevices);
+            },
+            
+            // Update the drivers list in the UI
+            updateDriversList(activeDevices) {
                 const driversList = document.getElementById('drivers-list');
-                driversList.innerHTML = '';
                 
-                activeDevices.forEach(device => {
-                    const driverCard = document.createElement('div');
-                    driverCard.className = 'driver-card';
-                    driverCard.innerHTML = `
+                if (activeDevices.length === 0) {
+                    driversList.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;">No active drivers in terminal area</div>';
+                    return;
+                }
+                
+                driversList.innerHTML = activeDevices.map(device => `
+                    <div class="driver-card">
                         <img src="${device.photo}" alt="${device.driverName}" class="driver-photo">
                         <div class="driver-info">
                             <div class="driver-name">${device.driverName}</div>
                             <div class="driver-meta">${device.vehicle} • ${device.id}</div>
+                            <div class="driver-meta">Last update: ${new Date(device.lastScanTime).toLocaleTimeString()}</div>
                         </div>
                         <div class="driver-status status-active">📍 Tracking</div>
-                    `;
-                    driversList.appendChild(driverCard);
+                    </div>
+                `).join('');
+            },
+            
+            // Set up event listeners
+            setupEventListeners() {
+                // Manual refresh button
+                document.getElementById('manual-location-refresh').addEventListener('click', () => {
+                    this.pollDeviceLocations();
+                    this.showNotification('Location requests sent to all active drivers', 'success');
                 });
                 
-                if (activeDevices.length === 0) {
-                    driversList.innerHTML = '<p style="text-align: center; color: #666;">No active drivers in terminal area</p>';
-                }
+                // View geofence button
+                document.getElementById('view-geofence').addEventListener('click', () => {
+                    this.map.setView([this.terminalGeofence.lat, this.terminalGeofence.lng], 15);
+                    this.showNotification('Centered map on terminal area', 'success');
+                });
+                
+                // Emergency alert button
+                document.getElementById('emergency-alert').addEventListener('click', () => {
+                    if (confirm('Send emergency alert to all drivers?')) {
+                        this.sendEmergencyAlert();
+                    }
+                });
+                
+                // Tracking interval selector
+                document.getElementById('tracking-interval').addEventListener('change', () => {
+                    this.startTracking();
+                });
+                
+                // Logout button
+                document.querySelector('.logout-btn').addEventListener('click', () => {
+                    localStorage.removeItem('currentAdmin');
+                    window.location.href = 'FTI Log&Sign.html';
+                });
+            },
+            
+            // Send emergency alert to all drivers
+            sendEmergencyAlert() {
+                this.devices.forEach(device => {
+                    if (device.trackingEnabled) {
+                        // In a real implementation, this would send an emergency alert
+                        console.log(`Emergency alert sent to ${device.driverName} (${device.simNumber})`);
+                    }
+                });
+                
+                this.showNotification('Emergency alert sent to all active drivers', 'warning');
+            },
+            
+            // Show a notification to the user
+            showNotification(message, type) {
+                const notificationArea = document.getElementById('notification-area');
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
+                    <span>${message}</span>
+                `;
+                
+                notificationArea.appendChild(notification);
+                
+                // Remove notification after 5 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
             }
         };
 
-        // Initialize when page loads
+        // Initialize the system when the page loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Get current admin name
-            document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
+            // Set current admin name
+            document.getElementById('current-admin').textContent = 
+                localStorage.getItem('currentAdmin') || 'Admin';
             
-            // Initialize GPS tracking
-            gpsTracking.init();
-            
-            // Manual refresh button
-            document.getElementById('manual-location-refresh').addEventListener('click', function() {
-                gpsTracking.devices.forEach(device => {
-                    if (gpsTracking.shouldTrackDevice(device)) {
-                        gpsTracking.requestLocation(device);
-                    }
-                });
-                alert('Location requests sent to all active drivers!');
-            });
-            
-            // View geofence button
-            document.getElementById('view-geofence').addEventListener('click', function() {
-                window.map.setView([14.5995, 120.9842], 15);
-                alert('Centered map on terminal area (500m radius)');
-            });
-            
-            // Tracking interval selector
-            document.getElementById('tracking-interval').addEventListener('change', function() {
-                const interval = parseInt(this.value) * 1000;
-                alert(`Tracking interval set to ${this.value} seconds. Will apply after page refresh.`);
-            });
-            
-            // Logout functionality
-            document.querySelector('.logout-btn').addEventListener('click', function() {
-                localStorage.removeItem('currentAdmin');
-                window.location.href = 'FTI Log&Sign.html';
-            });
+            // Initialize the GPS tracking system
+            GPSTrackingSystem.init();
         });
     </script>
 </body>

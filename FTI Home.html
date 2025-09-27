@@ -6,12 +6,14 @@
     <title>FTI ARCA SOUTH TRICYCLE TERMINAL - Home</title>
     <style>
         :root {
-            --primary-color: #FFC107;  /* Amber yellow */
-            --secondary-color: #FFA000;  /* Darker amber */
-            --accent-color: #FF6F00;  /* Deep orange accent */
-            --light-color: #FFF8E1;  /* Light amber background */
-            --dark-color: #5D4037;  /* Brown for text */
-            --admin-color: #673AB7;  /* Purple for admin */
+            --primary-color: #2C3E50;  /* Professional dark blue */
+            --secondary-color: #3498DB;  /* Professional blue */
+            --accent-color: #1ABC9C;  /* Teal accent */
+            --light-color: #F8F9FA;  /* Light gray background */
+            --dark-color: #2C3E50;  /* Dark blue for text */
+            --admin-color: #8E44AD;  /* Professional purple for admin */
+            --border-color: #E0E0E0;  /* Light gray for borders */
+            --success-color: #27AE60;  /* Green for positive stats */
         }
         
         * {
@@ -22,21 +24,22 @@
         }
         
         body {
-            background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+            background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
             min-height: 100vh;
             padding: 20px;
+            color: var(--dark-color);
         }
         
         header {
             background-color: white;
             padding: 1.5rem;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             margin-bottom: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border-color);
         }
         
         .logo {
@@ -47,13 +50,13 @@
         .logo h1 {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--dark-color);
+            color: var(--primary-color);
             margin-right: 1.5rem;
         }
         
         .terminal-badge {
             background-color: var(--primary-color);
-            color: var(--dark-color);
+            color: white;
             padding: 0.4rem 0.8rem;
             border-radius: 6px;
             font-size: 0.95rem;
@@ -77,7 +80,7 @@
         }
         
         .logout-btn {
-            background-color: var(--accent-color);
+            background-color: var(--admin-color);
             color: white;
             border: none;
             padding: 0.5rem 1rem;
@@ -88,7 +91,9 @@
         }
         
         .logout-btn:hover {
-            background-color: #E65100;
+            background-color: #7D3C98;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .dashboard {
@@ -101,10 +106,10 @@
             background-color: white;
             border-radius: 10px;
             padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             cursor: pointer;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border-color);
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -112,12 +117,13 @@
         
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            border-color: var(--admin-color);
         }
         
         .card-icon {
             font-size: 2.5rem;
-            color: var(--primary-color);
+            color: var(--admin-color);
             margin-bottom: 1rem;
         }
         
@@ -131,14 +137,11 @@
             opacity: 0.8;
             margin-bottom: 1rem;
             flex-grow: 1;
+            line-height: 1.5;
         }
         
         .admin-card {
             border: 1px solid var(--admin-color);
-        }
-        
-        .admin-card .card-icon {
-            color: var(--admin-color);
         }
         
         .admin-section {
@@ -158,18 +161,20 @@
             content: "🔒";
             margin-right: 0.5rem;
         }
+        
         footer {
             text-align: center;
             padding: 1px;
-            background-color: #FFF9C4;
-            color: #7e7d7d;
+            background-color: #F8F9FA;
+            color: #6C757D;
             font-size: 14px;
             position: fixed;
             bottom: 0;
             width: 100%;
+            border-top: 1px solid var(--border-color);
         }
 
-         .stats-container {
+        .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
@@ -180,9 +185,15 @@
             background-color: white;
             border-radius: 10px;
             padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             text-align: center;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
         }
         
         .stat-value {
@@ -201,22 +212,38 @@
             background-color: white;
             border-radius: 10px;
             padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             margin-bottom: 2rem;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border-color);
         }
         
         .activity-item {
             display: flex;
             justify-content: space-between;
             padding: 1rem;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
         
         .activity-item:last-child {
             border-bottom: none;
         }
-
+        
+        .page-title {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        
+        /* Subtle animation for page load */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        main > * {
+            animation: fadeIn 0.5s ease-out;
+        }
     </style>
 </head>
 <body>
@@ -232,7 +259,7 @@
     </header>
     
     <main>
-         <h1 class="page-title">Dashboard</h1>
+        <h1 class="page-title">Dashboard</h1>
         
         <div class="stats-container">
             <div class="stat-card">
@@ -273,20 +300,19 @@
         <div class="admin-section">
             <h2>Administrator Tools</h2>
             <div class="dashboard">
+                <!-- Driver Management Card -->
+                <div class="card admin-card" onclick="location.href='FTI DriverManage.html'">
+                    <div class="card-icon">👨‍✈️</div>
+                    <h2>Driver Management and Reports</h2>
+                    <p>Manage driver profiles, registrations, status, vehicle information, and generate insightful reports.</p>
+                    <button class="logout-btn" style="background-color: var(--admin-color); align-self: flex-start;">Manage Drivers</button>
+                </div>      
                 <!-- System Configuration Card -->
-                <div class="card admin-card" onclick="location.href='FTI System Config.html'">
+                <div class="card admin-card" onclick="location.href='FTI-System-Config.html'">
                     <div class="card-icon">⚙️</div>
                     <h2>System Configuration</h2>
                     <p>Configure terminal settings, RFID parameters, and system preferences.</p>
                     <button class="logout-btn" style="background-color: var(--admin-color); align-self: flex-start;">Configure</button>
-                </div>
-                
-                <!-- Reports Card -->
-                <div class="card admin-card" onclick="location.href='FTI Rep&Analy.html'">
-                    <div class="card-icon">📊</div>
-                    <h2>Reports & Analytics</h2>
-                    <p>Generate reports on driver activities, earnings, and terminal operations.</p>
-                    <button class="logout-btn" style="background-color: var(--admin-color); align-self: flex-start;">View Reports</button>
                 </div>
                 
                 <!-- User Management Card -->
@@ -299,6 +325,10 @@
             </div>
         </div>
     </main>
+
+    <footer>
+        <p>Created by Bacanto, Nacion, and Tan</p>
+    </footer>
 
     <script>
         // Simulate admin check - in real app this would come from authentication
@@ -342,7 +372,7 @@
                 alert('Logging out...');
                 // Clear the stored admin name
                 localStorage.removeItem('currentAdmin');
-                window.location.href = 'FTI Log&Sign.html';
+                window.location.href = 'FTI-Log-Sign.html';
             });
             
             // Make entire cards clickable
@@ -380,9 +410,5 @@
         
         document.addEventListener('DOMContentLoaded', loadDashboardStats);
     </script>
-
-    <footer>
-    <p>Created by Bacanto, Nacion, and Tan</p>
-</footer>
 </body>
 </html>

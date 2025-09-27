@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FTI ARCA SOUTH - Driver Management</title>
+    <title>FTI ARCA SOUTH - Driver Management & Reports</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-color: #FFC107;  /* Amber yellow */
-            --secondary-color: #FFA000;  /* Darker amber */
-            --accent-color: #FF6F00;  /* Deep orange accent */
-            --light-color: #FFF8E1;  /* Light amber background */
-            --dark-color: #5D4037;  /* Brown for text */
-            --admin-color: #673AB7;  /* Purple for admin */
-            --success-color: #689F38;  /* Green for success */
-            --danger-color: #D32F2F;  /* Red for errors */
+            --primary-color: #2C3E50;
+            --secondary-color: #3498DB;
+            --accent-color: #1ABC9C;
+            --light-color: #F8F9FA;
+            --dark-color: #2C3E50;
+            --admin-color: #8E44AD;
+            --success-color: #27AE60;
+            --danger-color: #E74C3C;
+            --border-color: #E0E0E0;
+            --warning-color: #F39C12;
         }
         
         * {
@@ -24,21 +28,22 @@
         }
         
         body {
-            background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%);
+            background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
             min-height: 100vh;
             padding: 20px;
+            color: var(--dark-color);
         }
         
         header {
             background-color: white;
             padding: 1.5rem;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             margin-bottom: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border-color);
         }
         
         .logo {
@@ -49,13 +54,13 @@
         .logo h1 {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--dark-color);
+            color: var(--primary-color);
             margin-right: 1.5rem;
         }
         
         .terminal-badge {
             background-color: var(--primary-color);
-            color: var(--dark-color);
+            color: white;
             padding: 0.4rem 0.8rem;
             border-radius: 6px;
             font-size: 0.95rem;
@@ -79,7 +84,7 @@
         }
         
         .logout-btn {
-            background-color: var(--accent-color);
+            background-color: var(--admin-color);
             color: white;
             border: none;
             padding: 0.5rem 1rem;
@@ -90,12 +95,14 @@
         }
         
         .logout-btn:hover {
-            background-color: #E65100;
+            background-color: #7D3C98;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
-           .back-btn {
+        
+        .back-btn {
             background-color: var(--primary-color);
-            color: var(--dark-color);
+            color: white;
             border: none;
             padding: 0.5rem 1rem;
             border-radius: 6px;
@@ -109,30 +116,31 @@
         }
         
         .back-btn:hover {
-            background-color: var(--secondary-color);
-            color: white;
+            background-color: #1E2A36;
+            transform: translateY(-2px);
         }
-        
+
         .management-container {
             background-color: white;
             border-radius: 10px;
             padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             margin-bottom: 2rem;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border-color);
         }
         
         .page-title {
-            color: var(--dark-color);
+            color: var(--admin-color);
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--primary-color);
+            border-bottom: 2px solid var(--admin-color);
         }
         
         .page-description {
             color: var(--dark-color);
             opacity: 0.8;
             margin-bottom: 2rem;
+            line-height: 1.5;
         }
         
         .controls {
@@ -152,18 +160,18 @@
         .search-box input {
             width: 100%;
             padding: 0.8rem 1rem 0.8rem 2.5rem;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 1rem;
-            background-color: #FFFDE7;
+            background-color: var(--light-color);
         }
         
-        .search-box::before {
-            content: "🔍";
+        .search-box i {
             position: absolute;
             left: 0.8rem;
             top: 50%;
             transform: translateY(-50%);
+            color: #6C757D;
         }
         
         .filter-group {
@@ -173,14 +181,14 @@
         
         .filter-group select {
             padding: 0.8rem;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            background-color: #FFFDE7;
+            background-color: var(--light-color);
         }
         
         .btn {
-            background-color: var(--primary-color);
-            color: var(--dark-color);
+            background-color: var(--secondary-color);
+            color: white;
             border: none;
             padding: 0.8rem 1.5rem;
             border-radius: 6px;
@@ -194,9 +202,9 @@
         }
         
         .btn:hover {
-            background-color: var(--secondary-color);
-            color: white;
+            background-color: #2980B9;
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .btn-add {
@@ -205,7 +213,7 @@
         }
         
         .btn-add:hover {
-            background-color: #5E35B1;
+            background-color: #7D3C98;
         }
         
         .btn-export {
@@ -214,30 +222,40 @@
         }
         
         .btn-export:hover {
-            background-color: #558B2F;
+            background-color: #219653;
+        }
+        
+        .btn-reports {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-reports:hover {
+            background-color: #D68910;
         }
         
         .drivers-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
         .drivers-table th,
         .drivers-table td {
             padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
         
         .drivers-table th {
-            background-color: #FFF9C4;
+            background-color: #E8F4FD;
             color: var(--dark-color);
             font-weight: 600;
         }
         
         .drivers-table tr:hover {
-            background-color: #FFFDE7;
+            background-color: #F8F9FA;
         }
         
         .driver-photo {
@@ -258,7 +276,7 @@
         }
         
         .status-pending {
-            color: var(--primary-color);
+            color: var(--secondary-color);
             font-weight: 500;
         }
         
@@ -269,10 +287,12 @@
             padding: 0.5rem;
             border-radius: 4px;
             transition: all 0.2s ease;
+            margin-right: 0.5rem;
         }
         
         .action-btn:hover {
             background-color: #eee;
+            transform: scale(1.1);
         }
         
         .pagination {
@@ -284,16 +304,26 @@
         
         .page-btn {
             padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             background-color: white;
             border-radius: 4px;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .page-btn:hover:not(.active):not(:disabled) {
+            background-color: #F0F0F0;
         }
         
         .page-btn.active {
-            background-color: var(--primary-color);
+            background-color: var(--secondary-color);
             color: white;
-            border-color: var(--primary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .no-drivers {
@@ -301,6 +331,156 @@
             padding: 2rem;
             color: var(--dark-color);
             opacity: 0.7;
+        }
+        
+        /* Reports Section */
+        .reports-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .reports-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .date-filter {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .date-filter input {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--admin-color);
+        }
+        
+        .stat-card .label {
+            font-size: 0.9rem;
+            color: #6C757D;
+        }
+        
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+        
+        .chart-card h3 {
+            margin-bottom: 1rem;
+            color: var(--admin-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .top-drivers-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .top-drivers-table th,
+        .top-drivers-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .top-drivers-table th {
+            background-color: #E8F4FD;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .top-drivers-table tr:hover {
+            background-color: #F8F9FA;
+        }
+        
+        .rank-badge {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: var(--admin-color);
+            color: white;
+            text-align: center;
+            line-height: 25px;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .rank-1 {
+            background-color: gold;
+            color: #333;
+        }
+        
+        .rank-2 {
+            background-color: silver;
+            color: #333;
+        }
+        
+        .rank-3 {
+            background-color: #CD7F32; /* Bronze */
+            color: white;
+        }
+        
+        /* Hidden class for toggling visibility */
+        .hidden {
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--light-color);
+            color: #6C757D;
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+            border-radius: 0 0 10px 10px;
         }
         
         @media (max-width: 768px) {
@@ -316,17 +496,23 @@
                 display: block;
                 overflow-x: auto;
             }
-        }
-
-        footer {
-            text-align: center;
-            padding: 1px;
-            background-color: #FFF9C4;
-            color: #7e7d7d;
-            font-size: 14px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            
+            .filter-group {
+                flex-wrap: wrap;
+            }
+            
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-card {
+                min-width: 100%;
+            }
+            
+            .date-filter {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -343,12 +529,31 @@
     </header>
     
     <main>
-        <div class="management-container">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i> Back
+        </button>
+        
+        <!-- Navigation Tabs -->
+        <div class="controls">
+            <div></div> <!-- Empty div for spacing -->
+            <div class="filter-group">
+                <button class="btn btn-reports" id="view-reports-btn">
+                    <i class="fas fa-chart-bar"></i> View Reports
+                </button>
+                <button class="btn" id="view-drivers-btn">
+                    <i class="fas fa-users"></i> View Drivers
+                </button>
+            </div>
+        </div>
+        
+        <!-- Driver Management Section -->
+        <div class="management-container" id="driver-management">
             <h1 class="page-title">04.05 Log Control - Driver Management</h1>
             <p class="page-description">View and manage all registered drivers, their status, and trip history.</p>
             
             <div class="controls">
                 <div class="search-box">
+                    <i class="fas fa-search"></i>
                     <input type="text" placeholder="Search drivers...">
                 </div>
                 
@@ -368,18 +573,16 @@
                     </select>
                 </div>
 
-                
-                
                 <button class="btn btn-add">
-                    <span>+</span> Add New Driver
+                    <i class="fas fa-plus"></i> Add New Driver
                 </button>
 
                 <button class="btn" onclick="location.href='FTI GPS Tracking.html'" style="background-color: var(--success-color); color: white;">
-                    <span>📍</span> View GPS Tracking
+                    <i class="fas fa-map-marker-alt"></i> View GPS Tracking
                 </button>
                 
                 <button class="btn btn-export">
-                    <span>📁</span> Export
+                    <i class="fas fa-file-export"></i> Export
                 </button>
             </div>
             
@@ -392,317 +595,432 @@
                         <th>Vehicle Info</th>
                         <th>Contact</th>
                         <th>Status</th>
+                        <th>Trips This Month</th>
                         <th>Last Trip</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Sample Driver 1 -->
-                    <tr>
-                        <td><img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Driver" class="driver-photo"></td>
-                        <td>
-                            <strong>Juan Dela Cruz</strong><br>
-                            <small>License: DL12345678</small>
-                        </td>
-                        <td>RFID-987654</td>
-                        <td>
-                            <strong>Honda TMX 155</strong><br>
-                            <small>Plate: ABC 1234</small>
-                        </td>
-                        <td>
-                            09123456789<br>
-                            juan.delacruz@example.com
-                        </td>
-                        <td class="status-active">Active</td>
-                        <td>Today, 08:45 AM</td>
-                        <td>
-                            <button class="action-btn" title="View">👁️</button>
-                            <button class="action-btn" title="Edit">✏️</button>
-                            <button class="action-btn" title="Deactivate">❌</button>
-                        </td>
-                    </tr>
-                    
-                    <!-- Sample Driver 2 -->
-                    <tr>
-                        <td><img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Driver" class="driver-photo"></td>
-                        <td>
-                            <strong>Pedro Santos</strong><br>
-                            <small>License: DL87654321</small>
-                        </td>
-                        <td>RFID-123456</td>
-                        <td>
-                            <strong>Yamaha Sniper 150</strong><br>
-                            <small>Plate: XYZ 5678</small>
-                        </td>
-                        <td>
-                            09876543210<br>
-                            pedro.santos@example.com
-                        </td>
-                        <td class="status-active">Active</td>
-                        <td>Today, 09:15 AM</td>
-                        <td>
-                            <button class="action-btn" title="View">👁️</button>
-                            <button class="action-btn" title="Edit">✏️</button>
-                            <button class="action-btn" title="Deactivate">❌</button>
-                        </td>
-                    </tr>
-                    
-                    <!-- Sample Driver 3 -->
-                    <tr>
-                        <td><img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Driver" class="driver-photo"></td>
-                        <td>
-                            <strong>Maria Reyes</strong><br>
-                            <small>License: DL13579246</small>
-                        </td>
-                        <td>RFID-246810</td>
-                        <td>
-                            <strong>Suzuki Raider 150</strong><br>
-                            <small>Plate: DEF 9012</small>
-                        </td>
-                        <td>
-                            09112233445<br>
-                            maria.reyes@example.com
-                        </td>
-                        <td class="status-pending">Pending</td>
-                        <td>Never</td>
-                        <td>
-                            <button class="action-btn" title="View">👁️</button>
-                            <button class="action-btn" title="Edit">✏️</button>
-                            <button class="action-btn" title="Approve">✅</button>
-                        </td>
-                    </tr>
-                    
-                    <!-- Sample Driver 4 -->
-                    <tr>
-                        <td><img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Driver" class="driver-photo"></td>
-                        <td>
-                            <strong>Antonio Bautista</strong><br>
-                            <small>License: DL11223344</small>
-                        </td>
-                        <td>RFID-3691215</td>
-                        <td>
-                            <strong>Kawasaki Barako 175</strong><br>
-                            <small>Plate: GHI 3456</small>
-                        </td>
-                        <td>
-                            09998887766<br>
-                            antonio.bautista@example.com
-                        </td>
-                        <td class="status-inactive">Inactive</td>
-                        <td>3 days ago</td>
-                        <td>
-                            <button class="action-btn" title="View">👁️</button>
-                            <button class="action-btn" title="Edit">✏️</button>
-                            <button class="action-btn" title="Activate">🔛</button>
-                        </td>
-                    </tr>
+                <tbody id="drivers-table-body">
+                    <!-- Driver data will be populated by JavaScript -->
                 </tbody>
             </table>
             
-            <div class="pagination">
-                <button class="page-btn">❮</button>
-                <button class="page-btn active">1</button>
-                <button class="page-btn">2</button>
-                <button class="page-btn">3</button>
-                <button class="page-btn">❯</button>
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be generated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Reports Section -->
+        <div class="reports-container hidden" id="reports-section">
+            <div class="reports-header">
+                <h1 class="page-title">Driver Performance Reports</h1>
+                <div class="date-filter">
+                    <label for="report-period">Report Period:</label>
+                    <select id="report-period">
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month" selected>This Month</option>
+                        <option value="quarter">This Quarter</option>
+                        <option value="year">This Year</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                    <div id="custom-date-range" class="hidden">
+                        <input type="date" id="start-date">
+                        <span>to</span>
+                        <input type="date" id="end-date">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <h3>Total Drivers</h3>
+                    <div class="value" id="total-drivers">0</div>
+                    <div class="label">Registered in system</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Drivers</h3>
+                    <div class="value" id="active-drivers">0</div>
+                    <div class="label">Currently active</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Trips</h3>
+                    <div class="value" id="total-trips">0</div>
+                    <div class="label">Completed this period</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Avg. Trips/Driver</h3>
+                    <div class="value" id="avg-trips">0</div>
+                    <div class="label">Average per driver</div>
+                </div>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>Top Drivers by Trip Count</h3>
+                    <canvas id="topDriversChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Trips by Day of Week</h3>
+                    <canvas id="tripsByDayChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h3>Top 10 Drivers - Detailed View</h3>
+                <table class="top-drivers-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Driver Name</th>
+                            <th>RFID Tag</th>
+                            <th>Vehicle</th>
+                            <th>Total Trips</th>
+                            <th>This Month</th>
+                            <th>Last Trip</th>
+                        </tr>
+                    </thead>
+                    <tbody id="top-drivers-table-body">
+                        <!-- Top drivers data will be populated by JavaScript -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
-<script>
-    const rowsPerPage = 10; // how many drivers per page
-    let currentPage = 10;
-
-    const tableBody = document.querySelector('.drivers-table tbody');
-    let allRows = Array.from(tableBody.querySelectorAll('tr'));
-    let filteredRows = [...allRows]; // dynamic dataset after search/filter/sort
-
-    // ----------------- Helper: Render -----------------
-    function renderTable() {
-        const totalRows = filteredRows.length;
-        const totalPages = Math.ceil(totalRows / rowsPerPage);
-
-        if (currentPage > totalPages) currentPage = totalPages || 1;
-
-        tableBody.innerHTML = '';
-
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        filteredRows.slice(start, end).forEach(r => tableBody.appendChild(r));
-
-        // Pagination buttons
-        const pagination = document.querySelector('.pagination');
-        pagination.innerHTML = '';
-
-        if (totalPages > 1) {
-            const prevBtn = document.createElement('button');
-            prevBtn.textContent = '❮';
-            prevBtn.className = 'page-btn';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => { currentPage--; renderTable(); };
-            pagination.appendChild(prevBtn);
-
-            for (let i = 1; i <= totalPages; i++) {
-                const btn = document.createElement('button');
-                btn.textContent = i;
-                btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
-                btn.onclick = () => { currentPage = i; renderTable(); };
-                pagination.appendChild(btn);
-            }
-
-            const nextBtn = document.createElement('button');
-            nextBtn.textContent = '❯';
-            nextBtn.className = 'page-btn';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => { currentPage++; renderTable(); };
-            pagination.appendChild(nextBtn);
-        }
-    }
-
-    // ----------------- Apply Filters -----------------
-    function applyFilters() {
-        const searchTerm = document.querySelector('.search-box input').value.toLowerCase();
-        const status = document.getElementById('status-filter').value;
-
-        filteredRows = allRows.filter(row => {
-            const driverName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-            const rfidTag = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            const plateNumber = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-            const rowStatus = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
-
-            const matchesSearch = driverName.includes(searchTerm) || rfidTag.includes(searchTerm) || plateNumber.includes(searchTerm);
-            const matchesStatus = (status === '' || rowStatus.includes(status));
-
-            return matchesSearch && matchesStatus;
-        });
-
-        renderTable();
-    }
-
-    // ----------------- Sorting -----------------
-    document.getElementById('sort-by').addEventListener('change', function() {
-        const option = this.value;
-
-        filteredRows.sort((a, b) => {
-            const nameA = a.querySelector('td:nth-child(2) strong').textContent.trim().toLowerCase();
-            const nameB = b.querySelector('td:nth-child(2) strong').textContent.trim().toLowerCase();
-            const indexA = allRows.indexOf(a);
-            const indexB = allRows.indexOf(b);
-
-            switch(option) {
-                case 'name-asc': return nameA.localeCompare(nameB);
-                case 'name-desc': return nameB.localeCompare(nameA);
-                case 'recent': return indexB - indexA; // newer first
-                case 'oldest': return indexA - indexB; // original order
-                default: return 0;
-            }
-        });
-
-        renderTable();
-    });
-
-    // ----------------- Events -----------------
-    document.querySelector('.search-box input').addEventListener('input', () => {
-        currentPage = 1;
-        applyFilters();
-    });
-
-    document.getElementById('status-filter').addEventListener('change', () => {
-        currentPage = 1;
-        applyFilters();
-    });
-
-    // ----------------- Init -----------------
-    applyFilters();
-</script>
+    
+    <footer>
+        <p>Created by Bacanto, Nacion, and Tan</p>
+    </footer>
 
     <script>
-        // Get current admin name (from localStorage or default)
+        // Sample driver data with trip counts
+        const driversData = [
+            {
+                id: 1,
+                name: "Juan Dela Cruz",
+                license: "DL12345678",
+                rfid: "RFID-987654",
+                vehicle: { make: "Honda", model: "TMX 155", plate: "ABC 1234" },
+                contact: { phone: "09123456789", email: "juan.delacruz@example.com" },
+                status: "active",
+                photo: "https://randomuser.me/api/portraits/men/1.jpg",
+                trips: { total: 245, month: 28, week: 8 },
+                lastTrip: "Today, 08:45 AM"
+            },
+            {
+                id: 2,
+                name: "Pedro Santos",
+                license: "DL87654321",
+                rfid: "RFID-123456",
+                vehicle: { make: "Yamaha", model: "Sniper 150", plate: "XYZ 5678" },
+                contact: { phone: "09876543210", email: "pedro.santos@example.com" },
+                status: "active",
+                photo: "https://randomuser.me/api/portraits/men/2.jpg",
+                trips: { total: 198, month: 22, week: 6 },
+                lastTrip: "Today, 09:15 AM"
+            },
+            {
+                id: 3,
+                name: "Maria Reyes",
+                license: "DL13579246",
+                rfid: "RFID-246810",
+                vehicle: { make: "Suzuki", model: "Raider 150", plate: "DEF 9012" },
+                contact: { phone: "09112233445", email: "maria.reyes@example.com" },
+                status: "pending",
+                photo: "https://randomuser.me/api/portraits/women/1.jpg",
+                trips: { total: 0, month: 0, week: 0 },
+                lastTrip: "Never"
+            },
+            {
+                id: 4,
+                name: "Antonio Bautista",
+                license: "DL11223344",
+                rfid: "RFID-3691215",
+                vehicle: { make: "Kawasaki", model: "Barako 175", plate: "GHI 3456" },
+                contact: { phone: "09998887766", email: "antonio.bautista@example.com" },
+                status: "inactive",
+                photo: "https://randomuser.me/api/portraits/men/3.jpg",
+                trips: { total: 156, month: 0, week: 0 },
+                lastTrip: "3 days ago"
+            },
+            {
+                id: 5,
+                name: "Roberto Garcia",
+                license: "DL55667788",
+                rfid: "RFID-555111",
+                vehicle: { make: "Honda", model: "Beat 110", plate: "JKL 7890" },
+                contact: { phone: "09115556677", email: "roberto.garcia@example.com" },
+                status: "active",
+                photo: "https://randomuser.me/api/portraits/men/4.jpg",
+                trips: { total: 312, month: 35, week: 10 },
+                lastTrip: "Today, 07:30 AM"
+            },
+            {
+                id: 6,
+                name: "Lorna Tolentino",
+                license: "DL99887766",
+                rfid: "RFID-777888",
+                vehicle: { make: "Yamaha", model: "Mio Sporty", plate: "MNO 1234" },
+                contact: { phone: "09223334455", email: "lorna.tolentino@example.com" },
+                status: "active",
+                photo: "https://randomuser.me/api/portraits/women/2.jpg",
+                trips: { total: 278, month: 30, week: 9 },
+                lastTrip: "Today, 10:20 AM"
+            },
+            {
+                id: 7,
+                name: "Fernando Lopez",
+                license: "DL44332211",
+                rfid: "RFID-222333",
+                vehicle: { make: "Suzuki", model: "Skydrive 125", plate: "PQR 5678" },
+                contact: { phone: "09334445566", email: "fernando.lopez@example.com" },
+                status: "active",
+                photo: "https://randomuser.me/api/portraits/men/5.jpg",
+                trips: { total: 189, month: 20, week: 5 },
+                lastTrip: "Today, 11:05 AM"
+            },
+            {
+                id: 8,
+                name: "Sofia Ramirez",
+                license: "DL77788899",
+                rfid: "RFID-444555",
+                vehicle: { make: "Kawasaki", model: "Rouser 135", plate: "STU 9012" },
+                contact: { phone: "09445556677", email: "sofia.ramirez@example.com" },
+                status: "active",
+                photo: "https://randomuser.me/api/portraits/women/3.jpg",
+                trips: { total: 265, month: 32, week: 8 },
+                lastTrip: "Today, 09:45 AM"
+            }
+        ];
+
+        // Sample trips by day data
+        const tripsByDayData = {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            data: [45, 52, 48, 55, 60, 75, 65]
+        };
+
+        // Get current admin name
         document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
         
-        // Search functionality
-        const searchInput = document.querySelector('.search-box input');
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const rows = document.querySelectorAll('.drivers-table tbody tr');
+        // DOM Elements
+        const driverManagement = document.getElementById('driver-management');
+        const reportsSection = document.getElementById('reports-section');
+        const viewReportsBtn = document.getElementById('view-reports-btn');
+        const viewDriversBtn = document.getElementById('view-drivers-btn');
+        const driversTableBody = document.getElementById('drivers-table-body');
+        const topDriversTableBody = document.getElementById('top-drivers-table-body');
+        const reportPeriod = document.getElementById('report-period');
+        const customDateRange = document.getElementById('custom-date-range');
+        
+        // Toggle between driver management and reports
+        viewReportsBtn.addEventListener('click', function() {
+            driverManagement.classList.add('hidden');
+            reportsSection.classList.remove('hidden');
+            generateReports();
+        });
+        
+        viewDriversBtn.addEventListener('click', function() {
+            reportsSection.classList.add('hidden');
+            driverManagement.classList.remove('hidden');
+        });
+        
+        // Show/hide custom date range
+        reportPeriod.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customDateRange.classList.remove('hidden');
+            } else {
+                customDateRange.classList.add('hidden');
+                generateReports();
+            }
+        });
+        
+        // Generate reports
+        function generateReports() {
+            // Calculate statistics
+            const totalDrivers = driversData.length;
+            const activeDrivers = driversData.filter(d => d.status === 'active').length;
+            const totalTrips = driversData.reduce((sum, driver) => sum + driver.trips.month, 0);
+            const avgTrips = activeDrivers > 0 ? (totalTrips / activeDrivers).toFixed(1) : 0;
             
-            rows.forEach(row => {
-                const driverName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const rfidTag = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                const plateNumber = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-                
-                if (driverName.includes(searchTerm) || rfidTag.includes(searchTerm) || plateNumber.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-        
-        // Filter functionality
-        const statusFilter = document.getElementById('status-filter');
-        statusFilter.addEventListener('change', function() {
-            const status = this.value;
-            const rows = document.querySelectorAll('.drivers-table tbody tr');
+            // Update statistics cards
+            document.getElementById('total-drivers').textContent = totalDrivers;
+            document.getElementById('active-drivers').textContent = activeDrivers;
+            document.getElementById('total-trips').textContent = totalTrips;
+            document.getElementById('avg-trips').textContent = avgTrips;
             
-            rows.forEach(row => {
-                const rowStatus = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
-                
-                if (status === '' || rowStatus.includes(status)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+            // Prepare data for top drivers chart
+            const activeDriversData = driversData
+                .filter(d => d.status === 'active')
+                .sort((a, b) => b.trips.month - a.trips.month)
+                .slice(0, 5);
+            
+            const topDriversLabels = activeDriversData.map(d => d.name);
+            const topDriversTrips = activeDriversData.map(d => d.trips.month);
+            
+            // Create or update top drivers chart
+            const topDriversCtx = document.getElementById('topDriversChart').getContext('2d');
+            if (window.topDriversChart) {
+                window.topDriversChart.destroy();
+            }
+            
+            window.topDriversChart = new Chart(topDriversCtx, {
+                type: 'bar',
+                data: {
+                    labels: topDriversLabels,
+                    datasets: [{
+                        label: 'Trips This Month',
+                        data: topDriversTrips,
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)',
+                            'rgba(230, 126, 34, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgb(52, 152, 219)',
+                            'rgb(46, 204, 113)',
+                            'rgb(155, 89, 182)',
+                            'rgb(241, 196, 15)',
+                            'rgb(230, 126, 34)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Top 5 Drivers by Trip Count'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Trips'
+                            }
+                        }
+                    }
                 }
             });
-        });
-        
-        // Sort functionality
-        const sortBy = document.getElementById('sort-by');
-        sortBy.addEventListener('change', function() {
-            // In a real app, this would sort the data
-            alert('Sorting by: ' + this.value);
-        });
-        
-        // Add new driver button
-        document.querySelector('.btn-add').addEventListener('click', function() {
-            window.location.href = 'FTI DriverRes.html';
-        });
-        
-        // Export button
-        document.querySelector('.btn-export').addEventListener('click', function() {
-            alert('Exporting driver data...');
-        });
-        
-        // Action buttons
-        document.querySelectorAll('.action-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const action = this.getAttribute('title');
-                const driverName = this.closest('tr').querySelector('td:nth-child(2) strong').textContent;
-                
-                switch(action) {
-                    case 'View':
-                        alert('Viewing details for: ' + driverName);
-                        break;
-                    case 'Edit':
-                        alert('Editing driver: ' + driverName);
-                        break;
-                    case 'Deactivate':
-                        if (confirm('Deactivate driver ' + driverName + '?')) {
-                            alert(driverName + ' has been deactivated');
+            
+            // Create or update trips by day chart
+            const tripsByDayCtx = document.getElementById('tripsByDayChart').getContext('2d');
+            if (window.tripsByDayChart) {
+                window.tripsByDayChart.destroy();
+            }
+            
+            window.tripsByDayChart = new Chart(tripsByDayCtx, {
+                type: 'line',
+                data: {
+                    labels: tripsByDayData.labels,
+                    datasets: [{
+                        label: 'Trips',
+                        data: tripsByDayData.data,
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                        borderColor: 'rgb(52, 152, 219)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Trips Distribution by Day of Week'
                         }
-                        break;
-                    case 'Approve':
-                        if (confirm('Approve driver ' + driverName + '?')) {
-                            alert(driverName + ' has been approved');
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Trips'
+                            }
                         }
-                        break;
-                    case 'Activate':
-                        if (confirm('Activate driver ' + driverName + '?')) {
-                            alert(driverName + ' has been activated');
-                        }
-                        break;
+                    }
                 }
             });
-        });
+            
+            // Populate top drivers table
+            const topDrivers = driversData
+                .filter(d => d.status === 'active')
+                .sort((a, b) => b.trips.month - a.trips.month)
+                .slice(0, 10);
+            
+            topDriversTableBody.innerHTML = '';
+            topDrivers.forEach((driver, index) => {
+                const row = document.createElement('tr');
+                const rankClass = index < 3 ? `rank-${index+1}` : '';
+                
+                row.innerHTML = `
+                    <td><span class="rank-badge ${rankClass}">${index+1}</span></td>
+                    <td>
+                        <strong>${driver.name}</strong><br>
+                        <small>License: ${driver.license}</small>
+                    </td>
+                    <td>${driver.rfid}</td>
+                    <td>
+                        <strong>${driver.vehicle.make} ${driver.vehicle.model}</strong><br>
+                        <small>Plate: ${driver.vehicle.plate}</small>
+                    </td>
+                    <td><strong>${driver.trips.total}</strong></td>
+                    <td><strong>${driver.trips.month}</strong></td>
+                    <td>${driver.lastTrip}</td>
+                `;
+                
+                topDriversTableBody.appendChild(row);
+            });
+        }
+        
+        // Populate drivers table
+function populateDriversTable() {
+    driversTableBody.innerHTML = '';
+    
+    driversData.forEach(driver => {
+        const row = document.createElement('tr');
+        const statusClass = `status-${driver.status}`;
+        
+        row.innerHTML = `
+            <td><img src="${driver.photo}" alt="Driver" class="driver-photo"></td>
+            <td>
+                <strong>${driver.name}</strong><br>
+                <small>License: ${driver.license}</small>
+            </td>
+            <td>${driver.rfid}</td>
+            <td>
+                <strong>${driver.vehicle.make} ${driver.vehicle.model}</strong><br>
+                <small>Plate: ${driver.vehicle.plate}</small>
+            </td>
+            <td>
+                <small>${driver.contact.phone}</small><br>
+                <small>${driver.contact.email}</small>
+            </td>
+            <td class="${statusClass}">
+                ${driver.status.charAt(0).toUpperCase() + driver.status.slice(1)}
+            </td>
+            <td>${driver.trips.month}</td>
+            <td>${driver.lastTrip}</td>
+            <td>
+                <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        
+        driversTableBody.appendChild(row);
+    });
+}
+
+// Initial population
+populateDriversTable();
         
         // Logout functionality
         document.querySelector('.logout-btn').addEventListener('click', function() {
@@ -710,11 +1028,5 @@
             window.location.href = 'FTI Log&Sign.html';
         });
     </script>
-      <button class="back-btn" onclick="window.history.back()">
-            ← Back
-        </button>
-         <footer>
-    <p>Created by Bacanto, Nacion, and Tan</p>
-</footer>
 </body>
 </html>
