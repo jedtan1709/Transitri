@@ -99,62 +99,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        /* Navigation Styles */
-        .main-navigation {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-            padding: 0.5rem;
-        }
-        
-        .nav-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        
-        .nav-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            text-decoration: none;
-            color: var(--dark-color);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            min-width: 100px;
-            flex: 1;
-        }
-        
-        .nav-btn:hover {
-            background-color: var(--light-color);
-            transform: translateY(-2px);
-        }
-        
-        .nav-btn.active {
-            background-color: var(--admin-color);
-            color: white;
-            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
-        }
-        
-        .nav-btn.active:hover {
-            background-color: #7D3C98;
-        }
-        
-        .nav-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .nav-text {
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-align: center;
-        }
+      
         
         .reports-container {
             background-color: white;
@@ -286,6 +231,63 @@
             border-top: 1px solid var(--border-color);
             margin-top: 2rem;
             border-radius: 0 0 10px 10px;
+        }
+
+          /* Navigation Styles */
+        .main-navigation {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            flex: 1;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--light-color);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.active {
+            background-color: var(--admin-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+        }
+        
+        .nav-btn.active:hover {
+            background-color: #7D3C98;
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
         }
         
         @media (max-width: 768px) {
