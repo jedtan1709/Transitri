@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FTI ARCA SOUTH TRICYCLE TERMINAL - Admin Login</title>
+    <title>FTI ARCA SOUTH - Login</title>
     <style>
         :root {
-            --primary-color: #2C3E50;  /* Professional dark blue */
-            --secondary-color: #3498DB;  /* Professional blue */
-            --accent-color: #1ABC9C;  /* Teal accent */
-            --light-color: #F8F9FA;  /* Light gray background */
-            --dark-color: #2C3E50;  /* Dark blue for text */
-            --success-color: #27AE60;  /* Green for success */
-            --danger-color: #E74C3C;  /* Red for errors */
-            --admin-color: #8E44AD;  /* Professional purple for admin elements */
-            --border-color: #E0E0E0;  /* Light gray for borders */
+            --primary-color: #2C3E50;
+            --secondary-color: #3498DB;
+            --accent-color: #1ABC9C;
+            --light-color: #F8F9FA;
+            --dark-color: #2C3E50;
+            --admin-color: #8E44AD;
+            --success-color: #27AE60;
+            --danger-color: #E74C3C;
+            --warning-color: #F39C12;
+            --border-color: #E0E0E0;
         }
         
         * {
@@ -25,213 +26,217 @@
         }
         
         body {
-            background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             padding: 20px;
         }
         
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 3rem;
+        .login-container {
             background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--admin-color) 100%);
+            color: white;
+            padding: 2rem;
             text-align: center;
-            animation: fadeIn 0.5s ease-out;
-            border: 1px solid var(--border-color);
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .login-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
         }
         
-        .logo {
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
+        .login-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
         }
         
-        .logo h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            letter-spacing: 1px;
-            margin-bottom: 0.75rem;
-        }
-        
-        .terminal-badge {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-top: 0.75rem;
-        }
-        
-        .admin-badge {
-            background-color: var(--admin-color);
-            color: white;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 0.5rem;
-            vertical-align: middle;
+        .login-body {
+            padding: 2rem;
         }
         
         .form-group {
-            margin-bottom: 1.75rem;
-            text-align: left;
+            margin-bottom: 1.5rem;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
             color: var(--dark-color);
-            font-weight: 500;
-            font-size: 1.05rem;
         }
         
-        .form-group input {
+        .form-control {
             width: 100%;
-            padding: 1rem;
-            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
-            font-size: 1.05rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
-            background-color: #FFFFFF;
         }
         
-        .form-group input:focus {
-            border-color: var(--admin-color);
+        .form-control:focus {
             outline: none;
-            box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
+            border-color: var(--admin-color);
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
         }
         
         .btn {
             width: 100%;
-            padding: 1rem;
+            padding: 0.75rem;
             border: none;
             border-radius: 8px;
-            background-color: var(--admin-color);
-            color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 0.75rem;
         }
         
-        .btn:hover {
-            background-color: #7D3C98;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--admin-color) 0%, #7D3C98 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
         }
         
-        .alert {
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            display: none;
-        }
-        
-        .alert-success {
-            background-color: rgba(39, 174, 96, 0.1);
-            color: var(--success-color);
-            border: 1px solid rgba(39, 174, 96, 0.2);
-        }
-        
-        .alert-danger {
-            background-color: rgba(231, 76, 60, 0.1);
-            color: var(--danger-color);
-            border: 1px solid rgba(231, 76, 60, 0.2);
-        }
-        
-        footer {
+        .login-footer {
             text-align: center;
-            padding: 1px;
-            background-color: #F8F9FA;
-            color: #6C757D;
-            font-size: 14px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            padding: 1rem 2rem 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .system-features {
+            margin-top: 2rem;
+            padding-top: 2rem;
             border-top: 1px solid var(--border-color);
         }
         
-        /* Subtle hover effect for the container */
-        .container:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .feature-list li::before {
+            content: "✅";
+        }
+        
+        .notification {
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .notification-error {
+            background-color: rgba(231, 76, 60, 0.1);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+        
+        .notification-success {
+            background-color: rgba(39, 174, 96, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1>FTI ARCA SOUTH <span class="admin-badge">ADMIN</span></h1>
-            <div class="terminal-badge">TRICYCLE TERMINAL SYSTEM</div>
-            <p id="subtitle" style="color: #6C757D; margin-top: 10px;">Administrator access only</p>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>FTI ARCA SOUTH</h1>
+            <p>Tricycle Terminal Management System</p>
         </div>
         
-        <!-- Admin Login Form -->
-        <div id="login-tab">
-            <div id="login-alert" class="alert"></div>
+        <div class="login-body">
+            <div id="notification-area"></div>
             
-            <form id="login-form" onsubmit="handleLogin(event)">
+            <form id="login-form">
                 <div class="form-group">
-                    <label for="login-adminname">Admin Name</label>
-                    <input type="text" id="login-adminname" placeholder="Enter admin name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="login-adminnumber">Admin Number</label>
-                    <input type="number" id="login-adminnumber" placeholder="Enter admin number" required>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="login-password">Password</label>
-                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
                 </div>
                 
-                <button type="submit" class="btn">Admin Login</button>
+                <button type="submit" class="btn btn-primary">Login to System</button>
             </form>
+            
+            <div class="system-features">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">System Features</h3>
+                <ul class="feature-list">
+                    <li>Real-time GPS Tracking</li>
+                    <li>SIM-based Device Management</li>
+                    <li>Terminal Area Monitoring</li>
+                    <li>Driver Activity Reports</li>
+                    <li>Emergency Alert System</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="login-footer">
+            <p>Created by Bacanto, Nacion, and Tan</p>
         </div>
     </div>
 
-    <footer>
-        <p>Created by Bacanto, Nacion, and Tan</p>
-    </footer>
-
-    <script>
-        // Form submission handler
-        function handleLogin(e) {
-            e.preventDefault();
-            const adminName = document.getElementById('login-adminname').value;
-            const adminNumber = document.getElementById('login-adminnumber').value;
-            const password = document.getElementById('login-password').value;
+    <script>    
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const notificationArea = document.getElementById('notification-area');
             
-            const alert = document.getElementById('login-alert');
-            alert.textContent = `Admin login attempt for ${adminName} (simulated)`;
-            alert.classList.add('alert-success');
-            alert.style.display = 'block';
+            // Check if user is already logged in
+            if (localStorage.getItem('currentAdmin')) {
+                window.location.href = 'FTI Home.html';
+            }
             
-            // In a real app, you would send this to a server
-            console.log('Admin login attempt:', { adminName, adminNumber, password });
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Simple authentication (in real system, this would be server-side)
+                if (username === 'admin' && password === 'admin123') {
+                    localStorage.setItem('currentAdmin', 'Administrator');
+                    showNotification('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'FTI Home.html';
+                    }, 1000);
+                } else {
+                    showNotification('Invalid username or password', 'error');
+                }
+            });
             
-            // Simulate successful login redirect
-            setTimeout(() => {
-                window.location.href = 'admin-dashboard.html';
-            }, 1500);
-        }
+            function showNotification(message, type) {
+                notificationArea.innerHTML = `
+                    <div class="notification notification-${type}">
+                        ${message}
+                    </div>
+                `;
+            }
+        });
     </script>
 </body>
 </html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTI ARCA SOUTH - Reports</title>
+    <style>
+        /* Copy all the same CSS styles from GPS Tracking page */
+        :root {
+            --primary-color: #2C3E50;
+            --secondary-color: #3498DB;
+            --accent-color: #1ABC9C;
+            --light-color: #F8F9FA;
+            --dark-color: #2C3E50;
+            --admin-color: #8E44AD;
+            --success-color: #27AE60;
+            --danger-color: #E74C3C;
+            --warning-color: #F39C12;
+            --border-color: #E0E0E0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark-color);
+        }
+        
+        header {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-color);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-right: 1.5rem;
+        }
+        
+        .terminal-badge {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-info span {
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .admin-name {
+            font-weight: 600;
+            color: var(--admin-color);
+        }
+        
+        .logout-btn {
+            background-color: var(--admin-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background-color: #7D3C98;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Navigation Styles */
+        .main-navigation {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            flex: 1;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--light-color);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.active {
+            background-color: var(--admin-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+        }
+        
+        .nav-btn.active:hover {
+            background-color: #7D3C98;
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .reports-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .page-title {
+            color: var(--admin-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--admin-color);
+        }
+        
+        .report-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: var(--light-color);
+            border-radius: 8px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:hover {
+            background-color: #2980B9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .report-card {
+            background-color: var(--light-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .report-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .report-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .report-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 6px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--admin-color);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--light-color);
+            color: #6C757D;
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+            border-radius: 0 0 10px 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .nav-btn {
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: 0.75rem 1rem;
+                min-width: auto;
+            }
+            
+            .nav-icon {
+                margin-bottom: 0;
+                margin-right: 0.75rem;
+                font-size: 1.25rem;
+            }
+            
+            .nav-text {
+                font-size: 0.8rem;
+            }
+            
+            .report-filters {
+                grid-template-columns: 1fr;
+            }
+            
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>FTI ARCA SOUTH</h1>
+            <div class="terminal-badge">TRICYCLE TERMINAL</div>
+        </div>
+        <div class="user-info">
+            <span>Welcome, <span class="admin-name" id="current-admin">Admin</span></span>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <a href="FTI Home.html" class="nav-btn">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="FTI GPS Tracking.html" class="nav-btn">
+                <span class="nav-icon">📍</span>
+                <span class="nav-text">GPS Tracking</span>
+            </a>
+            <a href="FTI Driver Management.html" class="nav-btn">
+                <span class="nav-icon">👨‍💼</span>
+                <span class="nav-text">Driver Management</span>
+            </a>
+            <a href="FTI Reports.html" class="nav-btn active">
+                <span class="nav-icon">📈</span>
+                <span class="nav-text">Reports</span>
+            </a>
+            <a href="FTI System Settings.html" class="nav-btn">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Settings</span>
+            </a>
+        </div>
+    </nav>
+    
+    <main>
+        <div class="reports-container">
+            <h1 class="page-title">System Reports & Analytics</h1>
+            
+            <div class="report-filters">
+                <div class="filter-group">
+                    <label for="report-type">Report Type</label>
+                    <select id="report-type" class="form-control">
+                        <option value="daily">Daily Activity</option>
+                        <option value="weekly">Weekly Summary</option>
+                        <option value="monthly">Monthly Report</option>
+                        <option value="driver">Driver Performance</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="date-from">From Date</label>
+                    <input type="date" id="date-from" class="form-control">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="date-to">To Date</label>
+                    <input type="date" id="date-to" class="form-control">
+                </div>
+                
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-success">Generate Report</button>
+                </div>
+            </div>
+            
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>📊 Terminal Activity</h3>
+                    <p>Overview of driver movements and terminal usage patterns</p>
+                    <div class="report-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-entries">0</div>
+                            <div class="stat-label">Terminal Entries</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="avg-stay">0m</div>
+                            <div class="stat-label">Avg. Stay Time</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-card">
+                    <h3>🚗 Driver Activity</h3>
+                    <p>Individual driver performance and tracking statistics</p>
+                    <div class="report-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="active-drivers">0</div>
+                            <div class="stat-label">Active Drivers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-distance">0km</div>
+                            <div class="stat-label">Total Distance</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-card">
+                    <h3>📱 GPS Performance</h3>
+                    <p>Device connectivity and location accuracy metrics</p>
+                    <div class="report-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="success-rate">0%</div>
+                            <div class="stat-label">Success Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="avg-response">0s</div>
+                            <div class="stat-label">Avg. Response</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-card">
+                    <h3>⏰ Peak Hours</h3>
+                    <p>Busiest times and terminal capacity analysis</p>
+                    <div class="report-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="peak-hour">--:--</div>
+                            <div class="stat-label">Peak Time</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="max-capacity">0</div>
+                            <div class="stat-label">Max Capacity</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Created by Bacanto, Nacion, and Tan</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current admin name
+            document.getElementById('current-admin').textContent = 
+                localStorage.getItem('currentAdmin') || 'Admin';
+            
+            // Load report data
+            loadReportData();
+            
+            // Logout functionality
+            document.querySelector('.logout-btn').addEventListener('click', function() {
+                localStorage.removeItem('currentAdmin');
+                window.location.href = 'FTI Log&Sign.html';
+            });
+        });
+        
+        function loadReportData() {
+            const devices = JSON.parse(localStorage.getItem('gpsTrackingDevices') || '[]');
+            const activeDevices = devices.filter(device => device.trackingEnabled);
+            
+            // Update report statistics (mock data for demo)
+            document.getElementById('total-entries').textContent = Math.floor(Math.random() * 50) + 20;
+            document.getElementById('avg-stay').textContent = Math.floor(Math.random() * 30) + 10 + 'm';
+            document.getElementById('active-drivers').textContent = activeDevices.length;
+            document.getElementById('total-distance').textContent = (Math.random() * 100).toFixed(1) + 'km';
+            document.getElementById('success-rate').textContent = Math.floor(Math.random() * 20) + 80 + '%';
+            document.getElementById('avg-response').textContent = Math.floor(Math.random() * 10) + 5 + 's';
+            document.getElementById('peak-hour').textContent = '07:00-09:00';
+            document.getElementById('max-capacity').textContent = Math.floor(Math.random() * 10) + 15;
+        }
+    </script>
+</body>
+</html>

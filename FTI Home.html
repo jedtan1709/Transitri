@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FTI ARCA SOUTH TRICYCLE TERMINAL - Home</title>
+    <title>FTI ARCA SOUTH - Dashboard</title>
     <style>
         :root {
-            --primary-color: #2C3E50;  /* Professional dark blue */
-            --secondary-color: #3498DB;  /* Professional blue */
-            --accent-color: #1ABC9C;  /* Teal accent */
-            --light-color: #F8F9FA;  /* Light gray background */
-            --dark-color: #2C3E50;  /* Dark blue for text */
-            --admin-color: #8E44AD;  /* Professional purple for admin */
-            --border-color: #E0E0E0;  /* Light gray for borders */
-            --success-color: #27AE60;  /* Green for positive stats */
+            --primary-color: #2C3E50;
+            --secondary-color: #3498DB;
+            --accent-color: #1ABC9C;
+            --light-color: #F8F9FA;
+            --dark-color: #2C3E50;
+            --admin-color: #8E44AD;
+            --success-color: #27AE60;
+            --danger-color: #E74C3C;
+            --warning-color: #F39C12;
+            --border-color: #E0E0E0;
         }
         
         * {
@@ -66,10 +68,10 @@
         .user-info {
             display: flex;
             align-items: center;
+            gap: 1rem;
         }
         
         .user-info span {
-            margin-right: 1rem;
             color: var(--dark-color);
             font-weight: 500;
         }
@@ -96,10 +98,68 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
+        /* Navigation Styles */
+        .main-navigation {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            flex: 1;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--light-color);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.active {
+            background-color: var(--admin-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+        }
+        
+        .nav-btn.active:hover {
+            background-color: #7D3C98;
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        
         .dashboard {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .card {
@@ -107,142 +167,116 @@
             border-radius: 10px;
             padding: 1.5rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            cursor: pointer;
             border: 1px solid var(--border-color);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            transition: transform 0.3s ease;
         }
         
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-            border-color: var(--admin-color);
-        }
-        
-        .card-icon {
-            font-size: 2.5rem;
-            color: var(--admin-color);
-            margin-bottom: 1rem;
         }
         
         .card h2 {
-            color: var(--dark-color);
-            margin-bottom: 0.5rem;
-        }
-        
-        .card p {
-            color: var(--dark-color);
-            opacity: 0.8;
-            margin-bottom: 1rem;
-            flex-grow: 1;
-            line-height: 1.5;
-        }
-        
-        .admin-card {
-            border: 1px solid var(--admin-color);
-        }
-        
-        .admin-section {
-            margin-top: 2rem;
-            border-top: 2px dashed var(--admin-color);
-            padding-top: 2rem;
-        }
-        
-        .admin-section h2 {
             color: var(--admin-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
+            gap: 0.5rem;
         }
         
-        .admin-section h2::before {
-            content: "🔒";
-            margin-right: 0.5rem;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 1px;
-            background-color: #F8F9FA;
-            color: #6C757D;
-            font-size: 14px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stat-value {
+        .stat-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: var(--admin-color);
+            color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
         
         .stat-label {
-            color: var(--dark-color);
-            font-weight: 500;
+            color: #666;
+            font-size: 0.9rem;
         }
         
-        .recent-activity {
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .module-card {
             background-color: white;
             border-radius: 10px;
-            padding: 1.5rem;
+            padding: 2rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 2rem;
             border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
         
-        .activity-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
         }
         
-        .activity-item:last-child {
-            border-bottom: none;
+        .module-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
         
-        .page-title {
+        .module-card h3 {
             color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
         
-        /* Subtle animation for page load */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .module-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
         
-        main > * {
-            animation: fadeIn 0.5s ease-out;
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--light-color);
+            color: #6C757D;
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .gps-active {
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .gps-inactive {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .nav-btn {
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: 0.75rem 1rem;
+                min-width: auto;
+            }
+            
+            .nav-icon {
+                margin-bottom: 0;
+                margin-right: 0.75rem;
+                font-size: 1.25rem;
+            }
+            
+            .nav-text {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -253,86 +287,90 @@
             <div class="terminal-badge">TRICYCLE TERMINAL</div>
         </div>
         <div class="user-info">
-            <span>Welcome, <span class="admin-name" id="current-admin">Loading...</span></span>
+            <span>Welcome, <span class="admin-name" id="current-admin">Admin</span></span>
             <button class="logout-btn">Logout</button>
         </div>
     </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <a href="FTI Home.html" class="nav-btn active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="FTI GPS Tracking.html" class="nav-btn">
+                <span class="nav-icon">📍</span>
+                <span class="nav-text">GPS Tracking</span>
+            </a>
+            <a href="FTI Driver Management.html" class="nav-btn">
+                <span class="nav-icon">👨‍💼</span>
+                <span class="nav-text">Driver Management</span>
+            </a>
+            <a href="FTI Reports.html" class="nav-btn">
+                <span class="nav-icon">📈</span>
+                <span class="nav-text">Reports</span>
+            </a>
+            <a href="FTI System Settings.html" class="nav-btn">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Settings</span>
+            </a>
+        </div>
+    </nav>
     
     <main>
-        <h1 class="page-title">Dashboard</h1>
-        
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-value" id="total-drivers">24</div>
-                <div class="stat-label">Total Drivers</div>
+        <div class="dashboard">
+            <div class="card">
+                <h2>📊 System Overview</h2>
+                <div class="stat-number" id="total-drivers">0</div>
+                <div class="stat-label">Total Registered Drivers</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value" id="active-drivers">18</div>
-                <div class="stat-label">Active Today</div>
+            
+            <div class="card">
+                <h2>📍 Active Tracking</h2>
+                <div class="stat-number" id="active-tracking">0</div>
+                <div class="stat-label">Currently Being Tracked</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value" id="total-trips">47</div>
-                <div class="stat-label">Trips Today</div>
+            
+            <div class="card">
+                <h2>🕒 Terminal Activity</h2>
+                <div class="stat-number" id="terminal-activity">0</div>
+                <div class="stat-label">Drivers in Terminal Area</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value" id="total-earnings">₱4,935</div>
-                <div class="stat-label">Earnings Today</div>
-            </div>
-        </div>
-        
-        <div class="recent-activity">
-            <h2>Recent Activity</h2>
-            <div class="activity-item">
-                <span>Juan Dela Cruz started a trip</span>
-                <span>08:45 AM</span>
-            </div>
-            <div class="activity-item">
-                <span>Maria Reyes completed a trip</span>
-                <span>08:30 AM</span>
-            </div>
-            <div class="activity-item">
-                <span>Pedro Santos registered</span>
-                <span>08:15 AM</span>
+            
+            <div class="card">
+                <h2>📱 GPS Devices</h2>
+                <div class="stat-number" id="gps-devices">0</div>
+                <div class="stat-label">Registered GPS Units</div>
             </div>
         </div>
         
-                <!-- Admin Section -->
-        <div class="admin-section">
-            <h2>Administrator Tools</h2>
-            <div class="dashboard">
-                <!-- Driver Management Card -->
-                <div class="card admin-card" onclick="location.href='FTI DriverManage.html'">
-                    <div class="card-icon">👨‍✈️</div>
-                    <h2>Driver Management and Reports</h2>
-                    <p>Manage driver profiles, registrations, status, vehicle information, and generate insightful reports.</p>
-                    <button class="logout-btn" style="background-color: var(--admin-color); align-self: flex-start;">Manage Drivers</button>
-                </div>      
-                <!-- System Configuration Card -->
-                <div class="card admin-card" onclick="location.href='FTI-System-Config.html'">
-                    <div class="card-icon">⚙️</div>
-                    <h2>System Configuration</h2>
-                    <p>Configure terminal settings, RFID parameters, and system preferences.</p>
-                    <button class="logout-btn" style="background-color: var(--admin-color); align-self: flex-start;">Configure</button>
-                </div>
-                
-                <!-- User Management Card -->
-                <div class="card admin-card" onclick="location.href='FTI User Management.html'">
-                    <div class="card-icon">👨‍💼</div>
-                    <h2>User Management</h2>
-                    <p>Manage system users, permissions, and administrator accounts.</p>
-                    <button class="logout-btn" style="background-color: var(--admin-color); align-self: flex-start;">Manage Users</button>
-                </div>
-
-                <!-- GPS Tracking Card -->
-                <div class="card admin-card" onclick="location.href='FTI GPS Tracking.html'">
-                    <div class="card-icon">📍</div>
-                    <h2>GPS Tracking</h2>
-                    <p>Track real-time locations of tricycles, monitor routes, and improve terminal efficiency.</p>
-                    <button class="logout-btn" style="background-color: var(--admin-color); align-self: flex-start;">Track GPS</button>
-                </div>
-            </div>
+        <h2 style="margin-bottom: 1.5rem; color: var(--primary-color);">System Modules</h2>
+        
+        <div class="modules">
+            <a href="FTI GPS Tracking.html" class="module-card gps-active">
+                <div class="module-icon">📍</div>
+                <h3>GPS Tracking</h3>
+                <p>Real-time location tracking of tricycle drivers within terminal area using SIM-based GPS devices</p>
+            </a>
+            
+            <a href="FTI Driver Management.html" class="module-card">
+                <div class="module-icon">👨‍💼</div>
+                <h3>Driver Management</h3>
+                <p>Manage driver profiles, vehicle information, and GPS device assignments</p>
+            </a>
+            
+            <a href="FTI Reports.html" class="module-card">
+                <div class="module-icon">📈</div>
+                <h3>Reports & Analytics</h3>
+                <p>Generate reports on terminal activity, driver movements, and system usage</p>
+            </a>
+            
+            <a href="FTI System Settings.html" class="module-card">
+                <div class="module-icon">⚙️</div>
+                <h3>System Settings</h3>
+                <p>Configure terminal boundaries, tracking parameters, and system preferences</p>
+            </a>
         </div>
-
     </main>
 
     <footer>
@@ -340,84 +378,36 @@
     </footer>
 
     <script>
-        // Simulate admin check - in real app this would come from authentication
-        const isAdmin = true; // Change to false to hide admin section
-        
-        // Function to get the current admin's name
-        function getCurrentAdmin() {
-            // In a real app, this would come from your authentication system or session
-            // For demo purposes, we'll use localStorage or a default value
-            
-            // Check if we have a stored admin name
-            const storedAdmin = localStorage.getItem('currentAdmin');
-            
-            if (storedAdmin) {
-                return storedAdmin;
-            } else {
-                // Default admin name (would normally come from your login system)
-                const defaultAdmin = "Admin Juan Dela Cruz";
-                localStorage.setItem('currentAdmin', defaultAdmin);
-                return defaultAdmin;
-            }
-        }
-        
-        // Function to update the admin name display
-        function updateAdminName() {
-            const adminNameElement = document.getElementById('current-admin');
-            adminNameElement.textContent = getCurrentAdmin();
-        }
-        
+        // Dashboard initialization
         document.addEventListener('DOMContentLoaded', function() {
-            if (!isAdmin) {
-                document.querySelector('.admin-section').style.display = 'none';
-            }
+            // Set current admin name
+            document.getElementById('current-admin').textContent = 
+                localStorage.getItem('currentAdmin') || 'Admin';
             
-            // Set the current admin name
-            updateAdminName();
+            // Load dashboard statistics
+            loadDashboardStats();
             
             // Logout functionality
             document.querySelector('.logout-btn').addEventListener('click', function() {
-                // In real app, this would log the user out
-                alert('Logging out...');
-                // Clear the stored admin name
                 localStorage.removeItem('currentAdmin');
-                window.location.href = 'FTI-Log-Sign.html';
+                window.location.href = 'FTI Log&Sign.html';
             });
-            
-            // Make entire cards clickable
-            document.querySelectorAll('.card').forEach(card => {
-                card.addEventListener('click', function(e) {
-                    // Don't trigger if clicking on a button inside the card
-                    if (e.target.tagName !== 'BUTTON') {
-                        const link = card.getAttribute('onclick').match(/location\.href='(.*?)'/)[1];
-                        window.location.href = link;
-                    }
-                });
-            });
-            
-            // Simulate being able to change the admin name (for demo purposes)
-            // In a real app, this would come from your authentication system
-            console.log("Demo: To change the admin name, run in console:");
-            console.log("localStorage.setItem('currentAdmin', 'New Admin Name'); updateAdminName();");
         });
-    </script>
-
-    <script>
-        // JavaScript to fetch and update stats from MongoDB
-        async function loadDashboardStats() {
-            try {
-                
-                // For demo purposes, we'll use static data
-                document.getElementById('total-drivers').textContent = '24';
-                document.getElementById('active-drivers').textContent = '18';
-                document.getElementById('total-trips').textContent = '47';
-                document.getElementById('total-earnings').textContent = '₱4,935';
-            } catch (error) {
-                console.error('Error loading dashboard stats:', error);
-            }
-        }
         
-        document.addEventListener('DOMContentLoaded', loadDashboardStats);
+        function loadDashboardStats() {
+            // Load devices from storage
+            const devices = JSON.parse(localStorage.getItem('gpsTrackingDevices') || '[]');
+            const activeDevices = devices.filter(device => 
+                device.isInTerminal && device.trackingEnabled
+            );
+            
+            // Update statistics
+            document.getElementById('total-drivers').textContent = devices.length;
+            document.getElementById('active-tracking').textContent = 
+                devices.filter(d => d.trackingEnabled).length;
+            document.getElementById('terminal-activity').textContent = activeDevices.length;
+            document.getElementById('gps-devices').textContent = devices.length;
+        }
     </script>
 </body>
 </html>

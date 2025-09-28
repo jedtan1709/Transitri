@@ -681,6 +681,95 @@
                 align-items: flex-start;
             }
         }
+
+          /* Navigation Styles */
+        .main-navigation {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            flex: 1;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--light-color);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.active {
+            background-color: var(--admin-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+        }
+        
+        .nav-btn.active:hover {
+            background-color: #7D3C98;
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+         @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .nav-btn {
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: 0.75rem 1rem;
+                min-width: auto;
+            }
+            
+            .nav-icon {
+                margin-bottom: 0;
+                margin-right: 0.75rem;
+                font-size: 1.25rem;
+            }
+            
+            .nav-text {
+                font-size: 0.8rem;
+            }
+            
+            .report-filters {
+                grid-template-columns: 1fr;
+            }
+            
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -694,6 +783,31 @@
             <button class="logout-btn">Logout</button>
         </div>
     </header>
+
+     <nav class="main-navigation">
+        <div class="nav-container">
+            <a href="FTI Home.html" class="nav-btn">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="FTI GPS Tracking.html" class="nav-btn" >
+                <span class="nav-icon">📍</span>
+                <span class="nav-text">GPS Tracking</span>
+            </a>
+            <a href="FTI Driver Management.html" class="nav-btn active">
+                <span class="nav-icon">👨‍💼</span>
+                <span class="nav-text">Driver Management</span>
+            </a>
+            <a href="FTI Reports.html" class="nav-btn">
+                <span class="nav-icon">📈</span>
+                <span class="nav-text">Reports</span>
+            </a>
+            <a href="FTI System Settings.html" class="nav-btn">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Settings</span>
+            </a>
+        </div>
+    </nav>
     
     <main>
         <button class="back-btn btn" onclick="window.history.back()">
