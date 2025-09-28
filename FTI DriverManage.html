@@ -34,6 +34,7 @@
             color: var(--dark-color);
         }
         
+        /* Header Styles */
         header {
             background-color: white;
             padding: 1.5rem;
@@ -72,12 +73,6 @@
             align-items: center;
         }
         
-        .user-info span {
-            margin-right: 1rem;
-            color: var(--dark-color);
-            font-weight: 500;
-        }
-        
         .admin-name {
             font-weight: 600;
             color: var(--admin-color);
@@ -100,27 +95,76 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .back-btn {
-            background-color: var(--primary-color);
+        /* Button Styles */
+        .btn {
+            background-color: var(--secondary-color);
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 0.8rem 1.5rem;
             border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: 500;
             transition: all 0.3s ease;
-            margin-bottom: 1rem;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 0.5rem;
         }
         
-        .back-btn:hover {
-            background-color: #1E2A36;
+        .btn:hover {
+            background-color: #2980B9;
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
-        .management-container {
+        
+        .back-btn {
+            background-color: var(--primary-color);
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-add {
+            background-color: var(--admin-color);
+        }
+        
+        .btn-add:hover {
+            background-color: #7D3C98;
+        }
+        
+        .btn-export {
+            background-color: var(--success-color);
+        }
+        
+        .btn-export:hover {
+            background-color: #219653;
+        }
+        
+        .btn-reports {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-reports:hover {
+            background-color: #D68910;
+        }
+        
+        .btn-cancel {
+            background-color: #6C757D;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #5A6268;
+        }
+        
+        .btn-submit {
+            background-color: var(--admin-color);
+        }
+        
+        .btn-submit:hover {
+            background-color: #7D3C98;
+        }
+        
+        /* Container Styles */
+        .management-container, .reports-container {
             background-color: white;
             border-radius: 10px;
             padding: 2rem;
@@ -143,6 +187,7 @@
             line-height: 1.5;
         }
         
+        /* Controls Section */
         .controls {
             display: flex;
             justify-content: space-between;
@@ -186,75 +231,28 @@
             background-color: var(--light-color);
         }
         
-        .btn {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .btn:hover {
-            background-color: #2980B9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn-add {
-            background-color: var(--admin-color);
-            color: white;
-        }
-        
-        .btn-add:hover {
-            background-color: #7D3C98;
-        }
-        
-        .btn-export {
-            background-color: var(--success-color);
-            color: white;
-        }
-        
-        .btn-export:hover {
-            background-color: #219653;
-        }
-        
-        .btn-reports {
-            background-color: var(--warning-color);
-            color: white;
-        }
-        
-        .btn-reports:hover {
-            background-color: #D68910;
-        }
-        
-        .drivers-table {
+        /* Table Styles */
+        .drivers-table, .top-drivers-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 1.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
-        .drivers-table th,
-        .drivers-table td {
+        .drivers-table th, .drivers-table td,
+        .top-drivers-table th, .top-drivers-table td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
         
-        .drivers-table th {
+        .drivers-table th, .top-drivers-table th {
             background-color: #E8F4FD;
             color: var(--dark-color);
             font-weight: 600;
         }
         
-        .drivers-table tr:hover {
+        .drivers-table tr:hover, .top-drivers-table tr:hover {
             background-color: #F8F9FA;
         }
         
@@ -295,54 +293,127 @@
             transform: scale(1.1);
         }
         
-        .pagination {
+        /* Photo Upload Styles */
+        .photo-upload-container {
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        
+        .photo-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px dashed #E0E0E0;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            margin-top: 2rem;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            margin-bottom: 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .photo-preview:hover {
+            border-color: #3498DB;
+            transform: scale(1.02);
+        }
+        
+        .photo-preview.has-image {
+            border-style: solid;
+            border-color: #27AE60;
+        }
+        
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photo-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6C757D;
+            text-align: center;
+        }
+        
+        .photo-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: #8E44AD;
+        }
+        
+        .photo-upload-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .upload-btn {
+            background-color: #3498DB;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
             gap: 0.5rem;
         }
         
-        .page-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border-color);
-            background-color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .upload-btn:hover {
+            background-color: #2980B9;
+            transform: translateY(-2px);
         }
         
-        .page-btn:hover:not(.active):not(:disabled) {
-            background-color: #F0F0F0;
+        .btn-remove {
+            background-color: var(--danger-color);
         }
         
-        .page-btn.active {
-            background-color: var(--secondary-color);
-            color: white;
-            border-color: var(--secondary-color);
+        .btn-remove:hover {
+            background-color: #C0392B;
         }
         
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .file-input {
+            display: none;
         }
         
-        .no-drivers {
+        .upload-info {
             text-align: center;
-            padding: 2rem;
-            color: var(--dark-color);
-            opacity: 0.7;
+            margin-top: 1rem;
+            color: #6C757D;
+            font-size: 0.9rem;
+        }
+        
+        .upload-status {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+        }
+        
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
         
         /* Reports Section */
-        .reports-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-        }
-        
         .reports-header {
             display: flex;
             justify-content: space-between;
@@ -416,29 +487,6 @@
             padding-bottom: 0.5rem;
         }
         
-        .top-drivers-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        .top-drivers-table th,
-        .top-drivers-table td {
-            padding: 0.8rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .top-drivers-table th {
-            background-color: #E8F4FD;
-            color: var(--dark-color);
-            font-weight: 600;
-        }
-        
-        .top-drivers-table tr:hover {
-            background-color: #F8F9FA;
-        }
-        
         .rank-badge {
             display: inline-block;
             width: 25px;
@@ -463,13 +511,105 @@
         }
         
         .rank-3 {
-            background-color: #CD7F32; /* Bronze */
+            background-color: #CD7F32;
             color: white;
         }
         
-        /* Hidden class for toggling visibility */
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            color: var(--admin-color);
+            margin: 0;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-color);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: var(--light-color);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Utility Classes */
         .hidden {
             display: none;
+        }
+        
+        .no-drivers {
+            text-align: center;
+            padding: 2rem;
+            color: var(--dark-color);
+            opacity: 0.7;
         }
         
         footer {
@@ -483,6 +623,7 @@
             border-radius: 0 0 10px 10px;
         }
         
+        /* Responsive Design */
         @media (max-width: 768px) {
             .controls {
                 flex-direction: column;
@@ -513,6 +654,32 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .photo-upload-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .upload-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .photo-preview {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .reports-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -529,13 +696,12 @@
     </header>
     
     <main>
-        <button class="back-btn" onclick="window.history.back()">
+        <button class="back-btn btn" onclick="window.history.back()">
             <i class="fas fa-arrow-left"></i> Back
         </button>
         
-        <!-- Navigation Tabs -->
         <div class="controls">
-            <div></div> <!-- Empty div for spacing -->
+            <div></div>
             <div class="filter-group">
                 <button class="btn btn-reports" id="view-reports-btn">
                     <i class="fas fa-chart-bar"></i> View Reports
@@ -548,13 +714,13 @@
         
         <!-- Driver Management Section -->
         <div class="management-container" id="driver-management">
-            <h1 class="page-title">04.05 Log Control - Driver Management</h1>
+            <h1 class="page-title">Driver Management</h1>
             <p class="page-description">View and manage all registered drivers, their status, and trip history.</p>
             
             <div class="controls">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search drivers...">
+                    <input type="text" id="search-input" placeholder="Search drivers...">
                 </div>
                 
                 <div class="filter-group">
@@ -573,12 +739,8 @@
                     </select>
                 </div>
 
-                <button class="btn btn-add">
+                <button class="btn btn-add" id="add-driver-btn">
                     <i class="fas fa-plus"></i> Add New Driver
-                </button>
-
-                <button class="btn" onclick="location.href='FTI GPS Tracking.html'" style="background-color: var(--success-color); color: white;">
-                    <i class="fas fa-map-marker-alt"></i> View GPS Tracking
                 </button>
                 
                 <button class="btn btn-export">
@@ -688,13 +850,114 @@
         </div>
     </main>
     
+    <!-- Add Driver Modal -->
+    <div class="modal" id="add-driver-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Register New Driver</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="driver-registration-form">
+                    <!-- Photo Upload Section -->
+                    <div class="photo-upload-container">
+                        <div class="photo-preview" id="photo-preview">
+                            <div class="photo-placeholder">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Click to Upload Photo</span>
+                            </div>
+                        </div>
+                        
+                        <div class="photo-upload-buttons">
+                            <input type="file" id="file-input" class="file-input" accept="image/*">
+                            <button type="button" class="upload-btn" id="upload-file-btn">
+                                <i class="fas fa-upload"></i> Choose File
+                            </button>
+                            <button type="button" class="upload-btn btn-remove" id="remove-photo-btn">
+                                <i class="fas fa-trash"></i> Remove Photo
+                            </button>
+                        </div>
+                        
+                        <div class="upload-info">
+                            <p>Supported formats: JPG, PNG, GIF (Max 5MB)</p>
+                        </div>
+                        
+                        <div class="upload-status" id="upload-status"></div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="driver-first-name">First Name *</label>
+                            <input type="text" id="driver-first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="driver-last-name">Last Name *</label>
+                            <input type="text" id="driver-last-name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="driver-license">Driver's License Number *</label>
+                        <input type="text" id="driver-license" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="driver-rfid">RFID Tag Number *</label>
+                        <input type="text" id="driver-rfid" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vehicle-make">Vehicle Make *</label>
+                            <input type="text" id="vehicle-make" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicle-model">Vehicle Model *</label>
+                            <input type="text" id="vehicle-model" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vehicle-plate">License Plate Number *</label>
+                        <input type="text" id="vehicle-plate" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="driver-phone">Phone Number *</label>
+                            <input type="tel" id="driver-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="driver-email">Email Address</label>
+                            <input type="email" id="driver-email">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="driver-status">Status *</label>
+                        <select id="driver-status" required>
+                            <option value="active">Active</option>
+                            <option value="pending">Pending</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" id="cancel-driver-btn">Cancel</button>
+                        <button type="submit" class="btn btn-submit">Register Driver</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     <footer>
         <p>Created by Bacanto, Nacion, and Tan</p>
     </footer>
 
     <script>
-        // Sample driver data with trip counts
-        const driversData = [
+        // Sample driver data
+        let driversData = [
             {
                 id: 1,
                 name: "Juan Dela Cruz",
@@ -730,78 +993,9 @@
                 photo: "https://randomuser.me/api/portraits/women/1.jpg",
                 trips: { total: 0, month: 0, week: 0 },
                 lastTrip: "Never"
-            },
-            {
-                id: 4,
-                name: "Antonio Bautista",
-                license: "DL11223344",
-                rfid: "RFID-3691215",
-                vehicle: { make: "Kawasaki", model: "Barako 175", plate: "GHI 3456" },
-                contact: { phone: "09998887766", email: "antonio.bautista@example.com" },
-                status: "inactive",
-                photo: "https://randomuser.me/api/portraits/men/3.jpg",
-                trips: { total: 156, month: 0, week: 0 },
-                lastTrip: "3 days ago"
-            },
-            {
-                id: 5,
-                name: "Roberto Garcia",
-                license: "DL55667788",
-                rfid: "RFID-555111",
-                vehicle: { make: "Honda", model: "Beat 110", plate: "JKL 7890" },
-                contact: { phone: "09115556677", email: "roberto.garcia@example.com" },
-                status: "active",
-                photo: "https://randomuser.me/api/portraits/men/4.jpg",
-                trips: { total: 312, month: 35, week: 10 },
-                lastTrip: "Today, 07:30 AM"
-            },
-            {
-                id: 6,
-                name: "Lorna Tolentino",
-                license: "DL99887766",
-                rfid: "RFID-777888",
-                vehicle: { make: "Yamaha", model: "Mio Sporty", plate: "MNO 1234" },
-                contact: { phone: "09223334455", email: "lorna.tolentino@example.com" },
-                status: "active",
-                photo: "https://randomuser.me/api/portraits/women/2.jpg",
-                trips: { total: 278, month: 30, week: 9 },
-                lastTrip: "Today, 10:20 AM"
-            },
-            {
-                id: 7,
-                name: "Fernando Lopez",
-                license: "DL44332211",
-                rfid: "RFID-222333",
-                vehicle: { make: "Suzuki", model: "Skydrive 125", plate: "PQR 5678" },
-                contact: { phone: "09334445566", email: "fernando.lopez@example.com" },
-                status: "active",
-                photo: "https://randomuser.me/api/portraits/men/5.jpg",
-                trips: { total: 189, month: 20, week: 5 },
-                lastTrip: "Today, 11:05 AM"
-            },
-            {
-                id: 8,
-                name: "Sofia Ramirez",
-                license: "DL77788899",
-                rfid: "RFID-444555",
-                vehicle: { make: "Kawasaki", model: "Rouser 135", plate: "STU 9012" },
-                contact: { phone: "09445556677", email: "sofia.ramirez@example.com" },
-                status: "active",
-                photo: "https://randomuser.me/api/portraits/women/3.jpg",
-                trips: { total: 265, month: 32, week: 8 },
-                lastTrip: "Today, 09:45 AM"
             }
         ];
 
-        // Sample trips by day data
-        const tripsByDayData = {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-            data: [45, 52, 48, 55, 60, 75, 65]
-        };
-
-        // Get current admin name
-        document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
-        
         // DOM Elements
         const driverManagement = document.getElementById('driver-management');
         const reportsSection = document.getElementById('reports-section');
@@ -811,30 +1005,296 @@
         const topDriversTableBody = document.getElementById('top-drivers-table-body');
         const reportPeriod = document.getElementById('report-period');
         const customDateRange = document.getElementById('custom-date-range');
+        const addDriverBtn = document.getElementById('add-driver-btn');
+        const addDriverModal = document.getElementById('add-driver-modal');
+        const closeModalBtn = document.querySelector('.close-modal');
+        const cancelDriverBtn = document.getElementById('cancel-driver-btn');
+        const driverRegistrationForm = document.getElementById('driver-registration-form');
+        const searchInput = document.getElementById('search-input');
+        const statusFilter = document.getElementById('status-filter');
+        const sortBy = document.getElementById('sort-by');
         
-        // Toggle between driver management and reports
-        viewReportsBtn.addEventListener('click', function() {
+        // Photo upload elements
+        const photoPreview = document.getElementById('photo-preview');
+        const fileInput = document.getElementById('file-input');
+        const uploadFileBtn = document.getElementById('upload-file-btn');
+        const removePhotoBtn = document.getElementById('remove-photo-btn');
+        const uploadStatus = document.getElementById('upload-status');
+        
+        // Current data
+        let currentDriversData = [...driversData];
+        let currentPhotoData = null;
+
+        // Initialize the application
+        function init() {
+            document.getElementById('current-admin').textContent = localStorage.getItem('currentAdmin') || 'Admin';
+            setupEventListeners();
+            filterAndSortDrivers();
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Navigation
+            viewReportsBtn.addEventListener('click', showReports);
+            viewDriversBtn.addEventListener('click', showDrivers);
+            
+            // Modal
+            addDriverBtn.addEventListener('click', () => addDriverModal.style.display = 'flex');
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelDriverBtn.addEventListener('click', closeModal);
+            window.addEventListener('click', (e) => {
+                if (e.target === addDriverModal) closeModal();
+            });
+            
+            // Filters
+            searchInput.addEventListener('input', filterAndSortDrivers);
+            statusFilter.addEventListener('change', filterAndSortDrivers);
+            sortBy.addEventListener('change', filterAndSortDrivers);
+            
+            // Reports
+            reportPeriod.addEventListener('change', handleReportPeriodChange);
+            
+            // Photo upload
+            uploadFileBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileUpload);
+            removePhotoBtn.addEventListener('click', resetPhoto);
+            photoPreview.addEventListener('click', () => fileInput.click());
+            
+            // Form submission
+            driverRegistrationForm.addEventListener('submit', handleFormSubmission);
+            
+            // Logout
+            document.querySelector('.logout-btn').addEventListener('click', logout);
+        }
+
+        // Navigation functions
+        function showReports() {
             driverManagement.classList.add('hidden');
             reportsSection.classList.remove('hidden');
             generateReports();
-        });
-        
-        viewDriversBtn.addEventListener('click', function() {
+        }
+
+        function showDrivers() {
             reportsSection.classList.add('hidden');
             driverManagement.classList.remove('hidden');
-        });
-        
-        // Show/hide custom date range
-        reportPeriod.addEventListener('change', function() {
+        }
+
+        // Modal functions
+        function closeModal() {
+            addDriverModal.style.display = 'none';
+            resetPhoto();
+        }
+
+        // Photo upload functions
+        function handleFileUpload(e) {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                
+                // Validate file
+                if (!validateFile(file)) return;
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    displayPhoto(e.target.result);
+                    currentPhotoData = e.target.result;
+                    showStatus('Photo uploaded successfully!', 'success');
+                };
+                reader.onerror = () => showStatus('Error reading file. Please try again.', 'error');
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function validateFile(file) {
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(file.type)) {
+                showStatus('Please select a valid image file (JPG, PNG, GIF)', 'error');
+                return false;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) {
+                showStatus('File size too large. Please select an image under 5MB.', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function displayPhoto(photoData) {
+            photoPreview.innerHTML = `<img src="${photoData}" alt="Profile Photo">`;
+            photoPreview.classList.add('has-image');
+        }
+
+        function resetPhoto() {
+            photoPreview.innerHTML = `
+                <div class="photo-placeholder">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Click to Upload Photo</span>
+                </div>
+            `;
+            photoPreview.classList.remove('has-image');
+            currentPhotoData = null;
+            fileInput.value = '';
+            showStatus('Photo removed', 'success');
+        }
+
+        function showStatus(message, type) {
+            uploadStatus.textContent = message;
+            uploadStatus.className = 'upload-status';
+            uploadStatus.classList.add(`status-${type}`);
+            uploadStatus.style.display = 'block';
+            
+            setTimeout(() => {
+                uploadStatus.style.display = 'none';
+            }, 3000);
+        }
+
+        // Form handling
+        function handleFormSubmission(e) {
+            e.preventDefault();
+            
+            const formData = {
+                firstName: document.getElementById('driver-first-name').value,
+                lastName: document.getElementById('driver-last-name').value,
+                license: document.getElementById('driver-license').value,
+                rfid: document.getElementById('driver-rfid').value,
+                vehicleMake: document.getElementById('vehicle-make').value,
+                vehicleModel: document.getElementById('vehicle-model').value,
+                vehiclePlate: document.getElementById('vehicle-plate').value,
+                phone: document.getElementById('driver-phone').value,
+                email: document.getElementById('driver-email').value,
+                status: document.getElementById('driver-status').value,
+                photo: currentPhotoData || `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 50) + 1}.jpg`
+            };
+            
+            const newDriver = createDriverObject(formData);
+            driversData.push(newDriver);
+            
+            filterAndSortDrivers();
+            closeModal();
+            driverRegistrationForm.reset();
+            
+            alert(`Driver ${formData.firstName} ${formData.lastName} has been successfully registered!`);
+        }
+
+        function createDriverObject(data) {
+            return {
+                id: driversData.length + 1,
+                name: `${data.firstName} ${data.lastName}`,
+                license: data.license,
+                rfid: data.rfid,
+                vehicle: {
+                    make: data.vehicleMake,
+                    model: data.vehicleModel,
+                    plate: data.vehiclePlate
+                },
+                contact: {
+                    phone: data.phone,
+                    email: data.email
+                },
+                status: data.status,
+                photo: data.photo,
+                trips: { total: 0, month: 0, week: 0 },
+                lastTrip: "Never"
+            };
+        }
+
+        // Filtering and sorting
+        function filterAndSortDrivers() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusValue = statusFilter.value;
+            const sortValue = sortBy.value;
+            
+            let filteredDrivers = driversData.filter(driver => 
+                driver.name.toLowerCase().includes(searchTerm) ||
+                driver.license.toLowerCase().includes(searchTerm) ||
+                driver.rfid.toLowerCase().includes(searchTerm) ||
+                driver.vehicle.plate.toLowerCase().includes(searchTerm) ||
+                driver.contact.phone.includes(searchTerm)
+            );
+            
+            if (statusValue) {
+                filteredDrivers = filteredDrivers.filter(driver => driver.status === statusValue);
+            }
+            
+            // Sort drivers
+            switch(sortValue) {
+                case 'name-asc':
+                    filteredDrivers.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'name-desc':
+                    filteredDrivers.sort((a, b) => b.name.localeCompare(a.name));
+                    break;
+                case 'recent':
+                    filteredDrivers.sort((a, b) => b.id - a.id);
+                    break;
+                case 'oldest':
+                    filteredDrivers.sort((a, b) => a.id - b.id);
+                    break;
+            }
+            
+            currentDriversData = filteredDrivers;
+            populateDriversTable();
+        }
+
+        function populateDriversTable() {
+            driversTableBody.innerHTML = '';
+            
+            if (currentDriversData.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="9" class="no-drivers">
+                        <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>No drivers found matching your criteria</p>
+                    </td>
+                `;
+                driversTableBody.appendChild(row);
+                return;
+            }
+            
+            currentDriversData.forEach(driver => {
+                const row = document.createElement('tr');
+                const statusClass = `status-${driver.status}`;
+                
+                row.innerHTML = `
+                    <td><img src="${driver.photo}" alt="Driver" class="driver-photo"></td>
+                    <td>
+                        <strong>${driver.name}</strong><br>
+                        <small>License: ${driver.license}</small>
+                    </td>
+                    <td>${driver.rfid}</td>
+                    <td>
+                        <strong>${driver.vehicle.make} ${driver.vehicle.model}</strong><br>
+                        <small>Plate: ${driver.vehicle.plate}</small>
+                    </td>
+                    <td>
+                        <small>${driver.contact.phone}</small><br>
+                        <small>${driver.contact.email}</small>
+                    </td>
+                    <td class="${statusClass}">
+                        ${driver.status.charAt(0).toUpperCase() + driver.status.slice(1)}
+                    </td>
+                    <td>${driver.trips.month}</td>
+                    <td>${driver.lastTrip}</td>
+                    <td>
+                        <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                driversTableBody.appendChild(row);
+            });
+        }
+
+        // Reports functions
+        function handleReportPeriodChange() {
             if (this.value === 'custom') {
                 customDateRange.classList.remove('hidden');
             } else {
                 customDateRange.classList.add('hidden');
                 generateReports();
             }
-        });
-        
-        // Generate reports
+        }
+
         function generateReports() {
             // Calculate statistics
             const totalDrivers = driversData.length;
@@ -847,108 +1307,6 @@
             document.getElementById('active-drivers').textContent = activeDrivers;
             document.getElementById('total-trips').textContent = totalTrips;
             document.getElementById('avg-trips').textContent = avgTrips;
-            
-            // Prepare data for top drivers chart
-            const activeDriversData = driversData
-                .filter(d => d.status === 'active')
-                .sort((a, b) => b.trips.month - a.trips.month)
-                .slice(0, 5);
-            
-            const topDriversLabels = activeDriversData.map(d => d.name);
-            const topDriversTrips = activeDriversData.map(d => d.trips.month);
-            
-            // Create or update top drivers chart
-            const topDriversCtx = document.getElementById('topDriversChart').getContext('2d');
-            if (window.topDriversChart) {
-                window.topDriversChart.destroy();
-            }
-            
-            window.topDriversChart = new Chart(topDriversCtx, {
-                type: 'bar',
-                data: {
-                    labels: topDriversLabels,
-                    datasets: [{
-                        label: 'Trips This Month',
-                        data: topDriversTrips,
-                        backgroundColor: [
-                            'rgba(52, 152, 219, 0.7)',
-                            'rgba(46, 204, 113, 0.7)',
-                            'rgba(155, 89, 182, 0.7)',
-                            'rgba(241, 196, 15, 0.7)',
-                            'rgba(230, 126, 34, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgb(52, 152, 219)',
-                            'rgb(46, 204, 113)',
-                            'rgb(155, 89, 182)',
-                            'rgb(241, 196, 15)',
-                            'rgb(230, 126, 34)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: true,
-                            text: 'Top 5 Drivers by Trip Count'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Number of Trips'
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Create or update trips by day chart
-            const tripsByDayCtx = document.getElementById('tripsByDayChart').getContext('2d');
-            if (window.tripsByDayChart) {
-                window.tripsByDayChart.destroy();
-            }
-            
-            window.tripsByDayChart = new Chart(tripsByDayCtx, {
-                type: 'line',
-                data: {
-                    labels: tripsByDayData.labels,
-                    datasets: [{
-                        label: 'Trips',
-                        data: tripsByDayData.data,
-                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                        borderColor: 'rgb(52, 152, 219)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Trips Distribution by Day of Week'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Number of Trips'
-                            }
-                        }
-                    }
-                }
-            });
             
             // Populate top drivers table
             const topDrivers = driversData
@@ -980,53 +1338,15 @@
                 topDriversTableBody.appendChild(row);
             });
         }
-        
-        // Populate drivers table
-function populateDriversTable() {
-    driversTableBody.innerHTML = '';
-    
-    driversData.forEach(driver => {
-        const row = document.createElement('tr');
-        const statusClass = `status-${driver.status}`;
-        
-        row.innerHTML = `
-            <td><img src="${driver.photo}" alt="Driver" class="driver-photo"></td>
-            <td>
-                <strong>${driver.name}</strong><br>
-                <small>License: ${driver.license}</small>
-            </td>
-            <td>${driver.rfid}</td>
-            <td>
-                <strong>${driver.vehicle.make} ${driver.vehicle.model}</strong><br>
-                <small>Plate: ${driver.vehicle.plate}</small>
-            </td>
-            <td>
-                <small>${driver.contact.phone}</small><br>
-                <small>${driver.contact.email}</small>
-            </td>
-            <td class="${statusClass}">
-                ${driver.status.charAt(0).toUpperCase() + driver.status.slice(1)}
-            </td>
-            <td>${driver.trips.month}</td>
-            <td>${driver.lastTrip}</td>
-            <td>
-                <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
-                <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
-            </td>
-        `;
-        
-        driversTableBody.appendChild(row);
-    });
-}
 
-// Initial population
-populateDriversTable();
-        
-        // Logout functionality
-        document.querySelector('.logout-btn').addEventListener('click', function() {
+        // Utility functions
+        function logout() {
             localStorage.removeItem('currentAdmin');
             window.location.href = 'FTI Log&Sign.html';
-        });
+        }
+
+        // Initialize the application
+        init();
     </script>
 </body>
 </html>
